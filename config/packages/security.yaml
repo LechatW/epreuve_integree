@@ -1,0 +1,27 @@
+security:
+    encoders:
+            App\Entity\User:
+                algorithm: auto
+    providers:
+        in_database:
+            entity:
+                class: App\Entity\User
+                property: login
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+        main:
+            anonymous: lazy
+            provider: in_database
+            form_login:
+                login_path: login
+                check_path: login
+                default_target_path: displayPhonebooks
+            logout:
+                path: logout
+                target: displayPhonebooks
+    access_control:
+        - { path: '^/script', ip: 127.0.0.1 }
+        # TODO: addPhonebook, deletePhonebook => ROLE_ADMIN
+

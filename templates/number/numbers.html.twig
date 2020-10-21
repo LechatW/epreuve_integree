@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des numéros{% endblock %}
+
+{% block body %}
+<div class="container">
+    <div class="row justify-content-center mt-5">
+        <h2>Liste des numéros</h2>
+    </div>
+
+    <table class="table mt-4">
+        <thead>
+            <tr>
+                <th scope="col">Nom</th>
+                <th scope="col">Tél.</th>
+                <th scope="col">Annuaires</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for number in numbers %}
+            <tr scope="row">
+                <td>{{number.name}}</td>
+                <td>{{number.phoneNumber}}</td>
+                <td>
+                    {% for phonebook in number.phonebooks %}
+                        {% if is_granted(phonebook.rolesManagement|first) or is_granted('ROLE_ADMIN') %}
+                            <a href="{{path('displayPhonebook',{'phonebook':phonebook.id})}}">{{phonebook.name}}</a>
+                        {% else %}
+                            {% for roleVisibility in phonebook.rolesVisibility %}
+                                {% if is_granted(roleVisibility) %}
+                                    <a href="{{path('displayPhonebook',{'phonebook':phonebook.id})}}">{{phonebook.name}}</a>
+                                {% endif %}
+                            {% endfor %} 
+                        {% endif %}
+                    {% endfor %}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    
+</div>
+{% endblock %}

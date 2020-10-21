@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des numéros{% endblock %}
+
+{% block body %}
+<div class="container">
+    <div class="row justify-content-center mt-5">
+        <h2>Liste des numéros</h2>
+    </div>
+
+    <form method="POST" action="{{path('addNumber',{'phonebook':phonebook.id})}}">
+        <table class="table mt-4">
+            <thead>
+                <tr>
+                    <th scope="col">Nom</th>
+                    <th scope="col">Tél.</th>
+                    <th scope="col">Ajout</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for number in numbers %}
+                <tr scope="row">
+                    <td>{{number.name}}</td>
+                    <td>{{number.phoneNumber}}</td>
+                    <td><input type="checkbox" name="number[]" value="{{number.id}}"></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="form-group row justify-content-center mt-4">
+            <input type="tel" name="newNumber" class="form-control col-4" placeholder="Créer un nouveau numéro">
+        </div>
+
+        <div class="form-group row justify-content-center mt-4">
+            <input type="tel" name="numberName" class="form-control col-4" placeholder="Nom d'un nouveau numéro">
+        </div>
+        
+        <div class="row justify-content-end mr-4">
+            <input class="text-right btn btn-primary" type="submit" value="Valider">
+        </div>
+    </form>
+    
+</div>
+{% endblock %}

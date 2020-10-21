@@ -1,0 +1,92 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Annuaire de {{phonebook.name}}{% endblock %}
+
+{% block body %}
+<div class="container">
+    <h2 class="text-center mt-4">Annuaire de {{phonebook.name}}</h2>
+
+    {% if is_granted(phonebook.rolesManagement|first) %}
+        <div class="text-right my-4">
+            <a class="btn btn-success" href="{{path('addNumber',{'phonebook':phonebook.id})}}">Ajouter</a>
+        </div>
+    {% endif %}
+
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success">
+            {{message}}
+        </div>
+    {% endfor %}
+
+    {% for message in app.flashes('error') %}
+        <div class="alert alert-danger">
+            {{message}}
+        </div>
+    {% endfor %}
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Nom</th>
+                <th scope="col">Service</th>
+                <th scope="col">Tél.</th>
+                {% if is_granted(phonebook.rolesManagement|first) or is_granted('ROLE_ADMIN') %}
+                    <th scope="col">Actions</th>
+                {% endif %}
+            </tr>
+        </thead>
+        <tbody>
+        {% for number in numbers %}
+            <tr>
+                <td scope="row">
+                    {{number.name}}
+                </td>
+                <td>
+                    {% for service in phonebook.rolesManagement %}
+                        {{service}}
+                    {% endfor %}
+                </td>
+                <td class="row">
+                    {{number.phoneNumber}}
+                </td>
+
+                {% if is_granted(phonebook.rolesManagement|first) or is_granted('ROLE_ADMIN') %}
+                    <td scope="row">
+                        <a class="btn btn-warning text-white" href="{{path('editNumber',{'phonebook':phonebook.id,'number':number.id})}}"><i class="fas fa-edit"></i></a>
+                        <a class="btn btn-danger text-white" data-toggle="modal" data-target="#deleteModal{{number.id}}"><i class="far fa-trash-alt"></i></a>
+
+                        <div class="modal fade" id="deleteModal{{number.id}}" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="deleteModalLabel">Suppression</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Annuler">
+                                        <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        Êtes-vous sûr de vouloir supprimer ce numéro : {{number.phoneNumber}} ?
+                                    </div>
+                                    <div class="modal-footer">  
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                                        <form method="POST" style="display:inline-block" action="{{path('deleteNumber',{'phonebook':phonebook.id, 'number':number.id})}}">
+                                            <input type="hidden" name="_method" value="DEL">
+                                            <input type="hidden" name="_token" value="{{csrf_token('DEL' ~ number.id)}}">
+                                            <button type="submit" class="btn btn-danger">Supprimer</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                {% endif %}
+                
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+</div>
+
+
+{% endblock %}
