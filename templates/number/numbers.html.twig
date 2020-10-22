@@ -20,7 +20,7 @@
         {% for number in numbers %}
             <tr scope="row">
                 <td>{{number.name}}</td>
-                <td>{{number.phoneNumber}}</td>
+                <td><a href="{{path('call',{'number':number.id})}}">{{number.phoneNumber}}</a></td>
                 <td>
                     {% for phonebook in number.phonebooks %}
                         {% if is_granted(phonebook.rolesManagement|first) or is_granted('ROLE_ADMIN') %}
