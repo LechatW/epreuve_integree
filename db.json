@@ -1,0 +1,16 @@
+{
+  "numbers": [
+      {"phone_number":"060\/12.36.32","name":"Caserne Mons"},
+      {"phone_number":"061\/42.36.15","name":"Secrétariat Mons"},
+      {"phone_number":"062\/55.12.14","name":"Police Mons"},
+      {"phone_number":"063\/69.48.17","name":"Caserne la Louvière"},
+      {"phone_number":"064\/65.54.26","name":"Secrétariat la Louvière"},
+      {"phone_number":"065\/59.03.87","name":"Police la Louvière"},
+      {"phone_number":"066\/85.78.99","name":"Caserne Soignies"},
+      {"phone_number":"067\/67.05.47","name":"Secrétariat Soignies"},
+      {"phone_number":"068\/05.36.43","name":"Police Soignies"},
+      {"phone_number":"069\/46.44.26","name":"Caserne Manage"},
+      {"phone_number":"070\/72.57.84","name":"Secrétariat Manage"},
+      {"phone_number":"071\/09.79.63","name":"Police Manage"}
+  ]
+}
