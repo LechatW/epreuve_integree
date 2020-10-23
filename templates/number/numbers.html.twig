@@ -8,6 +8,18 @@
         <h2>Liste des numéros</h2>
     </div>
 
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success">
+            {{message}}
+        </div>
+    {% endfor %}
+
+    {% for message in app.flashes('error') %}
+        <div class="alert alert-danger">
+            {{message}}
+        </div>
+    {% endfor %}
+
     <table class="table mt-4">
         <thead>
             <tr>
@@ -20,7 +32,13 @@
         {% for number in numbers %}
             <tr scope="row">
                 <td>{{number.name}}</td>
-                <td><a href="{{path('call',{'number':number.id})}}">{{number.phoneNumber}}</a></td>
+                <td>
+                    {% if not app.user or app.user.id == number.user.id %}
+                        {{number.phoneNumber}}
+                    {% else %}
+                        <a href="{{path('call',{'number':number.id})}}">{{number.phoneNumber}}</a>
+                    {% endif %}
+                </td>
                 <td>
                     {% for phonebook in number.phonebooks %}
                         {% if is_granted(phonebook.rolesManagement|first) or is_granted('ROLE_ADMIN') %}

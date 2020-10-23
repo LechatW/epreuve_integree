@@ -47,7 +47,11 @@
                     {% endfor %}
                 </td>
                 <td class="row">
-                    {{number.phoneNumber}}
+                    {% if not app.user or app.user.id == number.user.id %}
+                        {{number.phoneNumber}}
+                    {% else %}
+                        <a href="{{path('call',{'number':number.id})}}">{{number.phoneNumber}}</a>
+                    {% endif %}
                 </td>
 
                 {% if is_granted(phonebook.rolesManagement|first) or is_granted('ROLE_ADMIN') %}

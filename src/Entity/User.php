@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\UserRepository;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -42,6 +44,24 @@ class User implements UserInterface
      * @ORM\Column(type="string", length=255)
      */
     private $lastName;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Call::class, mappedBy="userIn")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $calls;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Number::class, mappedBy="user")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $numbers;
+
+    public function __construct()
+    {
+        $this->calls = new ArrayCollection();
+        $this->numbers = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -122,12 +142,74 @@ class User implements UserInterface
 
     public function getLastName()
     {
-        return $this->firstName;
+        return $this->lastName;
     }
 
     public function setLastName($lastName)
     {
         $this->lastName = $lastName;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Call[]
+     */
+    public function getCalls(): Collection
+    {
+        return $this->calls;
+    }
+
+    public function addCall(Call $call): self
+    {
+        if (!$this->calls->contains($call)) {
+            $this->calls[] = $call;
+            $call->setUserIn($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCall(Call $call): self
+    {
+        if ($this->calls->contains($call)) {
+            $this->calls->removeElement($call);
+            // set the owning side to null (unless already changed)
+            if ($call->getUserIn() === $this) {
+                $call->setUserIn(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Number[]
+     */
+    public function getNumbers(): Collection
+    {
+        return $this->numbers;
+    }
+
+    public function addNumber(Number $number): self
+    {
+        if (!$this->numbers->contains($number)) {
+            $this->numbers[] = $number;
+            $number->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeNumber(Number $number): self
+    {
+        if ($this->numbers->contains($number)) {
+            $this->numbers->removeElement($number);
+            // set the owning side to null (unless already changed)
+            if ($number->getUser() === $this) {
+                $number->setUser(null);
+            }
+        }
 
         return $this;
     }

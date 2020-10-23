@@ -35,6 +35,17 @@ class Number
      */
     private $phonebooks;
 
+    /**
+     * @ORM\Column(type="string", length=20)
+     */
+    private $type;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="numbers")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $user;
+
     public function __construct()
     {
         $this->phonebooks = new ArrayCollection();
@@ -91,6 +102,30 @@ class Number
         if ($this->phonebooks->contains($phonebook)) {
             $this->phonebooks->removeElement($phonebook);
         }
+
+        return $this;
+    }
+
+    public function getType(): ?string
+    {
+        return $this->type;
+    }
+
+    public function setType(string $type): self
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
 
         return $this;
     }
