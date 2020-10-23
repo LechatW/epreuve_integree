@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Number;
+use App\Entity\Phonebook;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
