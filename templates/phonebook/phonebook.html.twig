@@ -6,9 +6,10 @@
 <div class="container">
     <h2 class="text-center mt-4">Annuaire de {{phonebook.name}}</h2>
 
-    {% if is_granted(phonebook.rolesManagement|first) %}
+    {% if is_granted(phonebook.rolesManagement|first) or is_granted('ROLE_ADMIN') %}
         <div class="text-right my-4">
-            <a class="btn btn-success" href="{{path('addNumber',{'phonebook':phonebook.id})}}">Ajouter</a>
+            <a class="btn btn-success" href="{{path('addNumber',{'phonebook':phonebook.id})}}"><i class="fas fa-phone"></i>&nbsp;Ajouter</a>
+            <a class="btn btn-success" href="{{path('export',{'phonebook':phonebook.id})}}"><i class="fas fa-file-export"></i>&nbsp;Exporter</a>
         </div>
     {% endif %}
 

@@ -57,6 +57,11 @@ class User implements UserInterface
      */
     private $numbers;
 
+    /**
+     * @ORM\OneToOne(targetEntity=Phone::class, inversedBy="user", cascade={"persist", "remove"})
+     */
+    private $phone;
+
     public function __construct()
     {
         $this->calls = new ArrayCollection();
@@ -213,4 +218,17 @@ class User implements UserInterface
 
         return $this;
     }
+
+    public function getPhone(): ?Phone
+    {
+        return $this->phone;
+    }
+
+    public function setPhone(?Phone $phone): self
+    {
+        $this->phone = $phone;
+
+        return $this;
+    }
+
 }
