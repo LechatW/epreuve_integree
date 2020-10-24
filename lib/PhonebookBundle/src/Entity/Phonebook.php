@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Entity;
+namespace ZHC\PhonebookBundle\Entity;
 
-use App\Repository\PhonebookRepository;
+use ZHC\PhonebookBundle\Repository\PhonebookRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -35,7 +35,7 @@ class Phonebook
     private $roles_visibility;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Number", mappedBy="phonebooks")
+     * @ORM\ManyToMany(targetEntity="ZHC\PhonebookBundle\Entity\Number", mappedBy="phonebooks")
      * @ORM\JoinColumn(nullable=true)
      */
     private $numbers;

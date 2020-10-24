@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Command;
+namespace ZHC\PhonebookBundle\Command;
 
 
-use App\Controller\ScriptController;
+use ZHC\PhonebookBundle\Controller\ScriptController;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Symfony\Component\Console\Command\Command;

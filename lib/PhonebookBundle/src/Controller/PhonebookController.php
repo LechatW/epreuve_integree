@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Controller;
+namespace ZHC\PhonebookBundle\Controller;
 
-use App\Entity\Phonebook;
-use App\Form\PhonebookType;
-use App\Repository\PhonebookRepository;
+use ZHC\PhonebookBundle\Entity\Phonebook;
+use ZHC\PhonebookBundle\Form\PhonebookType;
+use ZHC\PhonebookBundle\Repository\PhonebookRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;

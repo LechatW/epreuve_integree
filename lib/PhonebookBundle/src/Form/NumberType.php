@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Form;
+namespace ZHC\PhonebookBundle\Form;
 
-use App\Entity\Number;
+use ZHC\PhonebookBundle\Entity\Number;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;

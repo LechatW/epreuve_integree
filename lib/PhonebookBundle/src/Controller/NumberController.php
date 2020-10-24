@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Controller;
+namespace ZHC\PhonebookBundle\Controller;
 
-use App\Entity\Number;
-use App\Form\NumberType;
-use App\Entity\Phonebook;
-use App\Repository\NumberRepository;
+use ZHC\PhonebookBundle\Entity\Number;
+use ZHC\PhonebookBundle\Form\NumberType;
+use ZHC\PhonebookBundle\Entity\Phonebook;
+use ZHC\PhonebookBundle\Repository\NumberRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;

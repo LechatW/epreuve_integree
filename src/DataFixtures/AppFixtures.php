@@ -2,11 +2,11 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\Number;
+use ZHC\PhonebookBundle\Entity\Number;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use App\Entity\User;
-use App\Entity\Phonebook;
+use ZHC\PhonebookBundle\Entity\Phonebook;
 use Faker\Factory;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 

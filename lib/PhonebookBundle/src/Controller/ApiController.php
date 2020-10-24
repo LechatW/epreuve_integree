@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Controller;
+namespace ZHC\PhonebookBundle\Controller;
 
-use App\Entity\Call;
-use App\Entity\Number;
-use App\Entity\Phone;
-use App\Entity\Phonebook;
+use ZHC\PhonebookBundle\Entity\Call;
+use ZHC\PhonebookBundle\Entity\Number;
+use ZHC\PhonebookBundle\Entity\Phone;
+use ZHC\PhonebookBundle\Entity\Phonebook;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

@@ -1,8 +1,11 @@
 <?php
 
-namespace App\Entity;
+namespace ZHC\PhonebookBundle\Entity;
 
-use App\Repository\NumberRepository;
+use ZHC\PhonebookBundle\Repository\NumberRepository;
+use ZHC\PhonebookBundle\Entity\Phonebook;
+use ZHC\PhonebookBundle\Entity\Phone;
+use App\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -30,7 +33,7 @@ class Number
     private $phoneNumber;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Phonebook", inversedBy="numbers")
+     * @ORM\ManyToMany(targetEntity="ZHC\PhonebookBundle\Entity\Phonebook", inversedBy="numbers")
      * @ORM\JoinColumn(nullable=true)
      */
     private $phonebooks;

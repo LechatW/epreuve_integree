@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Entity;
+namespace ZHC\PhonebookBundle\Entity;
 
-use App\Repository\PhoneRepository;
+use ZHC\PhonebookBundle\Repository\PhoneRepository;
+use App\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;

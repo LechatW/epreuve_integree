@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Entity;
+namespace ZHC\PhonebookBundle\Entity;
 
-use App\Repository\CallRepository;
+use ZHC\PhonebookBundle\Repository\CallRepository;
+use App\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 
 /**

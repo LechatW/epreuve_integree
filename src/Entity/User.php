@@ -5,6 +5,9 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use ZHC\PhonebookBundle\Entity\Call;
+use ZHC\PhonebookBundle\Entity\Number;
+use ZHC\PhonebookBundle\Entity\Phone;
 use App\Repository\UserRepository;
 use Symfony\Component\Security\Core\User\UserInterface;
 

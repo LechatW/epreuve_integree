@@ -5,3 +5,7 @@ controllers:
 kernel:
     resource: ../../src/Kernel.php
     type: annotation
+
+phonebook_controllers:
+    resource: ../../lib/PhonebookBundle/src/Controller/
+    type: annotation

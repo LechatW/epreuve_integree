@@ -4,3 +4,4 @@ twig:
     strict_variables: '%kernel.debug%'
     exception_controller: null
     form_themes: ['bootstrap_4_layout.html.twig']
+    path: '%kernel.project_dir%/lib/PhonebookBundle/src/Resources/views'

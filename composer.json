@@ -40,7 +40,8 @@
     },
     "autoload": {
         "psr-4": {
-            "App\\": "src/"
+            "App\\": "src/",
+            "ZHC\\PhonebookBundle\\": "lib/PhonebookBundle/src/"
         }
     },
     "autoload-dev": {

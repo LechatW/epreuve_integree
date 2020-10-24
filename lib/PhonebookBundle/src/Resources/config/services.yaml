@@ -1,0 +1,13 @@
+parameters:
+
+services:
+    _defaults:
+        autowire: true   
+        autoconfigure: true
+
+    ZHC\PhonebookBundle\: 
+        resource: '../../'
+
+    ZHC\PhonebookBundle\Controller\:
+        resource: '../../Controller/'
+        tags: ['controller.service_arguments']

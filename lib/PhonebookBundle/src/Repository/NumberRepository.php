@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Repository;
+namespace ZHC\PhonebookBundle\Repository;
 
-use App\Entity\Number;
-use App\Entity\Phonebook;
+use ZHC\PhonebookBundle\Entity\Number;
+use ZHC\PhonebookBundle\Entity\Phonebook;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 

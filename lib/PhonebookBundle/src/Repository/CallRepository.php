@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Repository;
+namespace ZHC\PhonebookBundle\Repository;
 
-use App\Entity\Call;
+use ZHC\PhonebookBundle\Entity\Call;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
