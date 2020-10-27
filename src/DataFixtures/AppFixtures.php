@@ -2,13 +2,18 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\Session;
+use App\Entity\Training;
 use ZHC\PhonebookBundle\Entity\Number;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use App\Entity\User;
+use App\Entity\UserSession;
+use DateTime;
 use ZHC\PhonebookBundle\Entity\Phonebook;
 use Faker\Factory;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Validator\Constraints\Time;
 
 class AppFixtures extends Fixture
 {
@@ -54,7 +59,7 @@ class AppFixtures extends Fixture
             $user1 = new User();
             $user1->setLogin('admin')
                   ->setPassword($this->encoder->encodePassword($user1, 'admin'))
-                  ->setRoles(['ROLE_ADMIN'])
+                  ->setRoles(['ROLE_ADMIN','ROLE_USER'])
                   ->setFirstName($faker->firstName())
                   ->setLastName($faker->lastName())
             ;
@@ -63,7 +68,7 @@ class AppFixtures extends Fixture
             $user2 = new User();
             $user2->setLogin('grh')
                   ->setPassword($this->encoder->encodePassword($user2, 'grh'))
-                  ->setRoles(['ROLE_RH'])
+                  ->setRoles(['ROLE_RH','ROLE_USER'])
                   ->setFirstName($faker->firstName())
                   ->setLastName($faker->lastName())
             ;
@@ -72,7 +77,7 @@ class AppFixtures extends Fixture
             $user3 = new User();
             $user3->setLogin('mons')
                   ->setPassword($this->encoder->encodePassword($user3, 'mons'))
-                  ->setRoles(['ROLE_ANNUAIRE_MONS'])
+                  ->setRoles(['ROLE_ANNUAIRE_MONS','ROLE_USER'])
                   ->setFirstName($faker->firstName())
                   ->setLastName($faker->lastName())
             ;
@@ -81,7 +86,7 @@ class AppFixtures extends Fixture
             $user4 = new User();
             $user4->setLogin('comptabilite')
                   ->setPassword($this->encoder->encodePassword($user4, 'comptabilite'))
-                  ->setRoles(['ROLE_COMPTABILITE'])
+                  ->setRoles(['ROLE_COMPTABILITE','ROLE_USER'])
                   ->setFirstName($faker->firstName())
                   ->setLastName($faker->lastName())
             ;
@@ -92,7 +97,7 @@ class AppFixtures extends Fixture
              */
             $number1 = new Number();
             $number1->setName('Caserne Mons')
-                    ->setPhoneNumber('065/12.36.32')
+                    ->setPhoneNumber($faker->phoneNumber())
                     ->setType('Professionnel')
                     ->addPhonebook($phonebook1)
                     ->setUser($user1)
@@ -101,7 +106,7 @@ class AppFixtures extends Fixture
 
             $number2 = new Number();
             $number2->setName('Secrétariat bis')
-                    ->setPhoneNumber('066/42.36.32')
+                    ->setPhoneNumber($faker->phoneNumber())
                     ->setType('Professionnel')
                     ->addPhonebook($phonebook1)
                     ->setUser($user2)
@@ -110,7 +115,7 @@ class AppFixtures extends Fixture
 
             $number3 = new Number();
             $number3->setName('Police')
-                    ->setPhoneNumber('067/55.36.32')
+                    ->setPhoneNumber($faker->phoneNumber())
                     ->setType('Professionnel')
                     ->addPhonebook($phonebook2)
                     ->setUser($user3)
@@ -119,7 +124,7 @@ class AppFixtures extends Fixture
 
             $number4 = new Number();
             $number4->setName('Ambulance')
-                    ->setPhoneNumber('068/69.48.32')
+                    ->setPhoneNumber($faker->phoneNumber())
                     ->setType('Professionnel')
                     ->addPhonebook($phonebook2)
                     ->addPhonebook($phonebook1)
@@ -129,11 +134,84 @@ class AppFixtures extends Fixture
 
             $number5 = new Number();
             $number5->setName($user1->getFirstName(). ' '. $user1->getLastName())
-                    ->setType('Professionnel')
                     ->setPhoneNumber($faker->phoneNumber)
+                    ->setType('Professionnel')
                     ->setUser($user1)
             ;
             $manager->persist($number5);
+
+            /**
+             * Trainings
+             */
+            $training1 = new Training();
+            $training1->setName('Ambulance')
+                      ->setTarget('Ambulanciers')
+                      ->setContact($user1)
+            ;
+            $manager->persist($training1);
+
+            $training2 = new Training();
+            $training2->setName('Caméra')
+                      ->setTarget('Pompiers')
+                      ->setContact($user1)
+            ;
+            $manager->persist($training2);
+
+            $training3 = new Training();
+            $training3->setName('Police')
+                      ->setTarget('Policiers')
+                      ->setContact($user2)
+            ;
+            $manager->persist($training3);
+
+            /**
+             * Sessions
+             */
+            $session1 = new Session();
+            $session1->setName('Ambulance T0-01')
+                     ->setStartAt(new DateTime('2020-11-14 08:00'))
+                     ->setEndAt(new DateTime('2020-11-14 16:00'))
+                     ->setRegistrationStartAt(new DateTime('2020-10-01'))
+                     ->setRegistrationEndAt(new DateTime('2020-11-05'))
+                     ->setLocation('Mons')
+                     ->setMaxRegistration(10)
+                     ->setTraining($training1)
+            ;
+            $manager->persist($session1);
+
+            $session2 = new Session();
+            $session2->setName('Ambulance T0-02')
+                     ->setStartAt(new DateTime('2020-11-16 08:00'))
+                     ->setEndAt(new DateTime('2020-11-16 16:00'))
+                     ->setRegistrationStartAt(new DateTime('2020-10-02'))
+                     ->setRegistrationEndAt(new DateTime('2020-11-06'))
+                     ->setLocation('Mons')
+                     ->setMaxRegistration(10)
+                     ->setTraining($training1)
+            ;
+            $manager->persist($session2);
+
+            $session3 = new Session();
+            $session3->setName('Caméra T0-01')
+                     ->setStartAt(new DateTime('2020-12-01 08:00'))
+                     ->setEndAt(new DateTime('2020-12-01 16:00'))
+                     ->setRegistrationStartAt(new DateTime('2020-11-01'))
+                     ->setRegistrationEndAt(new DateTime('2020-11-09'))
+                     ->setLocation('La louvière')
+                     ->setMaxRegistration(8)
+                     ->setTraining($training2)
+            ;
+            $manager->persist($session3);
+
+            /**
+             * UserSessions
+             */
+            $userSession1 = new UserSession();
+            $userSession1->setUser($user1)
+                         ->setSession($session1)
+                         ->setStatus('Validé')
+            ;
+            $manager->persist($userSession1);
             
             $manager->flush();
       }

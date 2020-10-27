@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des formations{% endblock %}
+
+{% block body %}
+<div class="container">
+    <h2 class="text-center mt-4">Liste des formations</h2>
+
+    {% if is_granted('ROLE_ADMIN') %}
+        <div class="text-right my-4">
+            <a class="btn btn-success" href="#">Ajouter</a>
+        </div>
+    {% endif %}
+
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success">
+            {{message}}
+        </div>
+    {% endfor %}
+
+    {% for message in app.flashes('error') %}
+        <div class="alert alert-danger">
+            {{message}}
+        </div>
+    {% endfor %}
+
+    <div class="row">
+        {% for training in trainings %}
+        <div class="col-4">
+            <div class="card">
+                <div class="card-body">
+                    <h3>{{training.name}}</h3>
+                    <p>Public cible : {{training.target}}</p>
+                    <a href="{{path('displayTraining',{'training':training.id})}}" class="btn btn-success"><i class="fas fa-bars"></i></a>
+                    <a href="{{path('displayCalendar',{'training':training.id})}}" class="btn btn-success"><i class="fas fa-calendar-alt"></i>&nbsp;Voir les dates</a>
+                </div>
+                <div class="card-footer text-right">
+                    <a href="#" class="btn btn-info"><i class="fas fa-edit"></i></a>
+                    <a href="#" class="btn btn-danger"><i class="fas fa-trash-alt"></i></a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    
+
+</div>
+{% endblock %}

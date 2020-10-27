@@ -23,5 +23,6 @@ security:
                 target: displayPhonebooks
     access_control:
         - { path: '^/script', ip: 127.0.0.1 }
-        # TODO: addPhonebook, deletePhonebook => ROLE_ADMIN
+        - { path: '^/ajout', roles: ROLE_ADMIN }
+        - { path: '^/annuaires/{phonebook}/suppression', roles: ROLE_ADMIN }
 

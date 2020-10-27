@@ -12,7 +12,6 @@
         <link rel="stylesheet" href="https://bootswatch.com/4/spacelab/bootstrap.min.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
-        <link rel="stylesheet" href="{{asset('css/styles.css')}}">
         {% block stylesheets %}{% endblock %}
     </head>
 
@@ -43,6 +42,15 @@
                     {% endif %}
                     >
                         <a class="nav-link" href="{{path('displayNumbers')}}">Numéros</a>
+                    </li>
+                    <li 
+                    {% if route_name matches '{^displayNumber}' %} 
+                        class="nav-item active"
+                    {% else %}
+                        class="nav-item"
+                    {% endif %}
+                    >
+                        <a class="nav-link" href="{{path('displayTrainings')}}">Formations</a>
                     </li>
                 </ul>
             </div>

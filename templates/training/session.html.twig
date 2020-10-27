@@ -1,0 +1,125 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des formations{% endblock %}
+
+{% block body %}
+<div class="container">
+    <h2 class="text-center mt-4">Formation {{training.name}}</h2>
+    <h3>Séance {{session.name}}</h3>
+
+    <div class="row text-center">
+        <div class="col-8">
+            <div class="card">
+                <div class="card-header">
+                    Dates et horaires
+                </div>
+                <div class="card-body">
+                    Du <span class="text-primary">{{session.startAt|date("d/m/Y à G:i")}}</span> jusqu'au <span class="text-info">{{session.endAt|date("d/m/Y à G:i")}}</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="card">
+                <div class="card-header">
+                    Gestion de la séance
+                </div>
+                <div class="card-body">
+                    <a href="#" class="btn btn-primary">Editer</a>
+                    <a href="#" class="btn btn-danger">Effacer</a>
+                    <a href="#" class="btn btn-primary">Dupliquer</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h4>Inscriptions</h4>
+    <div class="row text-center">
+        <div class="col-3">
+            <div class="card">
+                <div class="card-header">
+                    Début d'inscription
+                </div>
+                <div class="card-body">
+                    {{session.registrationStartAt|date("d-m-Y")}}
+                </div>
+            </div>
+        </div>
+        <div class="col-3">
+            <div class="card">
+                <div class="card-header">
+                    Fin d'inscription
+                </div>
+                <div class="card-body">
+                    {{session.registrationEndAt|date("d-m-Y")}}
+                </div>
+            </div>
+        </div>
+        <div class="col-3">
+            <div class="card">
+                <div class="card-header">
+                    Nombre de places disponibles
+                </div>
+                <div class="card-body">
+                    {{session.userSessions|length}}/{{session.maxRegistration}}
+                </div>
+            </div>
+        </div>
+        <div class="col-3">
+            <div class="card">
+                <div class="card-header">
+                    Mon inscription
+                </div>
+                <div class="card-body">
+                    L'inscription à cette formation n'est pas authorisée avec ce compte d'utilisateur
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-4">
+        <div class="card">
+            <div class="card-header">
+                Liste des agents inscrits
+            </div>
+            <table class="table">
+                <thead class="thead">
+                    <tr>
+                        <th scope="col">Prénom de l'agent</th>
+                        <th scope="col">Nom de l'agent</th>
+                        <th scope="col">Service</th>
+                        <th scope="col">Statut</th>
+                        <th scope="col">Validation</th>
+                        <th scope="col">Actions</th>
+                      </tr>
+                </thead>
+                <tbody class="tbody">
+                    {% for userSession in session.userSessions %}
+                        <tr>
+                            <th>{{userSession.user.firstName}}</th>
+                            <td>{{userSession.user.lastName}}</td>
+                            <td>{{userSession.user.roles|first}}</td>
+                            {% if userSession.status == 'Validé' %}
+                                <td class="text-success">{{userSession.status}}</td>
+                            {% elseif userSession.status == 'Annulé' %}
+                                <td class="text-warning">{{userSession.status}}</td>
+                            {% elseif userSession.status == 'En cours' %}
+                                <td class="text-secondary">{{userSession.status}}</td>
+                            {% endif %}
+                            <td>
+                                {% if is_granted('ROLE_ADMIN') and (userSession.status == 'En cours') %}
+                                    <a href="#" class="btn-sm btn-success"><i class="fas fa-check"></i></a>
+                                    <a href="#" class="btn-sm btn-warning"><i class="fas fa-window-close"></i></a>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <a href="#" class="btn-sm btn-danger"><i class="fas fa-trash-alt"></i></a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+{% endblock %}  

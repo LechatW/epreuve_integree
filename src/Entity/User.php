@@ -65,10 +65,22 @@ class User implements UserInterface
      */
     private $phone;
 
+    /**
+     * @ORM\OneToMany(targetEntity=UserSession::class, mappedBy="user")
+     */
+    private $userSessions;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Training::class, mappedBy="contact")
+     */
+    private $trainings;
+
     public function __construct()
     {
         $this->calls = new ArrayCollection();
         $this->numbers = new ArrayCollection();
+        $this->userSessions = new ArrayCollection();
+        $this->trainings = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -100,7 +112,7 @@ class User implements UserInterface
         return $this;
     }
 
-    public function getRoles(): ?array
+    public function getRoles(): array
     {
         $roles = $this->roles;
 
@@ -230,6 +242,64 @@ class User implements UserInterface
     public function setPhone(?Phone $phone): self
     {
         $this->phone = $phone;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|UserSession[]
+     */
+    public function getUserSessions(): Collection
+    {
+        return $this->userSessions;
+    }
+
+    public function addUserSession(UserSession $userSession): self
+    {
+        if (!$this->userSessions->contains($userSession)) {
+            $this->userSessions[] = $userSession;
+            $userSession->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUserSession(UserSession $userSession): self
+    {
+        if ($this->userSessions->contains($userSession)) {
+            $this->userSessions->removeElement($userSession);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Training[]
+     */
+    public function getTrainings(): Collection
+    {
+        return $this->trainings;
+    }
+
+    public function addTraining(Training $training): self
+    {
+        if (!$this->trainings->contains($training)) {
+            $this->trainings[] = $training;
+            $training->setContact($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTraining(Training $training): self
+    {
+        if ($this->trainings->contains($training)) {
+            $this->trainings->removeElement($training);
+            // set the owning side to null (unless already changed)
+            if ($training->getContact() === $this) {
+                $training->setContact(null);
+            }
+        }
 
         return $this;
     }
