@@ -66,12 +66,12 @@ class User implements UserInterface
     private $phone;
 
     /**
-     * @ORM\OneToMany(targetEntity=UserSession::class, mappedBy="user")
+     * @ORM\OneToMany(targetEntity=UserSession::class, mappedBy="user", cascade={"persist", "remove"})
      */
     private $userSessions;
 
     /**
-     * @ORM\OneToMany(targetEntity=Training::class, mappedBy="contact")
+     * @ORM\OneToMany(targetEntity=Training::class, mappedBy="contact", cascade={"persist", "remove"})
      */
     private $trainings;
 

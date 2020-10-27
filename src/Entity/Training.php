@@ -30,7 +30,7 @@ class Training
     private $target;
 
     /**
-     * @ORM\OneToMany(targetEntity=Session::class, mappedBy="training")
+     * @ORM\OneToMany(targetEntity=Session::class, mappedBy="training", cascade={"persist", "remove"})
      */
     private $sessions;
 

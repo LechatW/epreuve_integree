@@ -16,11 +16,25 @@
             {% endif %}
         {% endfor %}
     </p>
+
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success">
+            {{message}}
+        </div>
+    {% endfor %}
+
+    {% for message in app.flashes('error') %}
+        <div class="alert alert-danger">
+            {{message}}
+        </div>
+    {% endfor %}
     
     <hr>
     <div class="mb-3 row">
         <div class="col">
-            <a href="#" class="btn btn-success"><i class="fas fa-calendar-alt"></i></a>
+            {% if is_granted('ROLE_ADMIN') %}
+            <a href="{{path('addSession',{'training':training.id})}}" class="btn btn-success"><i class="fas fa-calendar-alt"></i></a>
+            {% endif %}
         </div>
         <div class="col-7">
             <h4 class="text-left">Dates des séances</h4>
@@ -41,21 +55,23 @@
         <tbody class="tbody">
             {% for session in training.sessions %}
                 <tr>
-                    <th scope="row"><a href="{{path('displaySession',{'training':training.id,'session':session.id})}}">{{session.name}}</a></th>
+                    <th scope="row"><a href="{{path('displaySession',{'session':session.id})}}">{{session.name}}</a></th>
                     <td>{{session.startAt|date("d/m/Y")}}</td>
                     <td>{{session.registrationStartAt|date("d/m/Y")}}</td>
                     <td>{{session.registrationEndAt|date("d/m/Y")}}</td>
                     <td>{{session.userSessions|length}}/{{session.maxRegistration}}</td>
                     <td>
-                        <a href="{{path('displaySession',{'training':training.id,'session':session.id})}}" class="btn btn-success"><i class="far fa-eye"></i></a>
-                        <a href="#" class="btn btn-primary"><i class="far fa-edit"></i></a>
+                        <a href="{{path('displaySession',{'session':session.id})}}" class="btn btn-success"><i class="far fa-eye"></i></a>
+                        {% if is_granted('ROLE_ADMIN') %}
+                        <a href="{{path('editSession',{'session':session.id,'training':training.id})}}" class="btn btn-primary"><i class="far fa-edit"></i></a>
+                        {% endif %}
                     </td>
                 </tr>
             {% endfor %}
         </tbody>
     </table>
-
-    <a href="{{path('displayCalendar',{'training':training.id})}}" class="btn btn-success"><i class="fas fa-calendar-alt"></i>&nbsp;Voir le calendrier des séances</a>
-
+    {% if training.sessions|length > 0 %}
+        <a href="{{path('displayCalendar',{'training':training.id})}}" class="btn btn-success"><i class="fas fa-calendar-alt"></i>&nbsp;Voir le calendrier des séances</a>
+    {% endif %}
 </div>
 {% endblock %}  

@@ -25,6 +25,31 @@ class PhonebookController extends AbstractController
     }
 
     /**
+     * @Route("/annuaires/ajout", name="addPhonebook")
+     */
+    public function addPhonebook(Request $request, EntityManagerInterface $entityManager)
+    {
+        $phonebook = new Phonebook();
+
+        $form = $this->createForm(PhonebookType::class,$phonebook);
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($phonebook);
+            $entityManager->flush();
+
+            $this->addFlash("success","L'ajout a bien été effectué");
+
+            return $this->redirectToRoute('displayPhonebooks');
+        }
+        
+        return $this->render('phonebook/addPhonebook.html.twig', [
+            'phonebook' => $phonebook,
+            'form' => $form->createView()
+        ]);
+    }
+
+    /**
      * @Route("/annuaires/{phonebook}", name="displayPhonebook")
      */
     public function displayPhonebook(Phonebook $phonebook)
@@ -47,31 +72,6 @@ class PhonebookController extends AbstractController
                 return $this->redirectToRoute('displayPhonebooks');
             }
         }
-    }
-
-    /**
-     * @Route("/ajout", name="addPhonebook")
-     */
-    public function addPhonebook(Request $request, EntityManagerInterface $entityManager)
-    {
-        $phonebook = new Phonebook();
-
-        $form = $this->createForm(PhonebookType::class,$phonebook);
-        $form->handleRequest($request);
-
-        if($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($phonebook);
-            $entityManager->flush();
-
-            $this->addFlash("success","L'ajout a bien été effectué");
-
-            return $this->redirectToRoute('displayPhonebooks');
-        }
-        
-        return $this->render('phonebook/addPhonebook.html.twig', [
-            'phonebook' => $phonebook,
-            'form' => $form->createView()
-        ]);
     }
 
     /**

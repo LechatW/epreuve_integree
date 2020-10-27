@@ -209,7 +209,25 @@ class AppFixtures extends Fixture
             $userSession1 = new UserSession();
             $userSession1->setUser($user1)
                          ->setSession($session1)
+                         ->setStatus('En cours')
+            ;
+            $manager->persist($userSession1);
+            
+            $manager->flush();
+
+            $userSession1 = new UserSession();
+            $userSession1->setUser($user2)
+                         ->setSession($session1)
                          ->setStatus('Validé')
+            ;
+            $manager->persist($userSession1);
+            
+            $manager->flush();
+
+            $userSession1 = new UserSession();
+            $userSession1->setUser($user3)
+                         ->setSession($session1)
+                         ->setStatus('Annulé')
             ;
             $manager->persist($userSession1);
             

@@ -22,7 +22,24 @@ security:
                 path: logout
                 target: displayPhonebooks
     access_control:
+        # All
+        - { path: '^/formations|^/sessions|^/inscriptions|^/annuaires|^/numeros|^/appel|^/export', roles: ROLE_USER }
+        # Script
         - { path: '^/script', ip: 127.0.0.1 }
-        - { path: '^/ajout', roles: ROLE_ADMIN }
-        - { path: '^/annuaires/{phonebook}/suppression', roles: ROLE_ADMIN }
+        # Formation
+        - { path: '^/formations', methods: DEL, roles: ROLE_ADMIN }
+        - { path: '^/formations/ajout', roles: ROLE_ADMIN }
+        - { path: '^/formations/*.*/edition', roles: ROLE_ADMIN }
+        # Session
+        - { path: '^/sessions', methods: DEL, roles: ROLE_ADMIN }
+        - { path: '^/sessions/ajout', roles: ROLE_ADMIN }
+        - { path: '^/sessions/*.*/duplication', roles: ROLE_ADMIN }
+        - { path: '^/sessions/*.*/edition', roles: ROLE_ADMIN }
+        # Inscription
+        - { path: '^/inscriptions', methods: DEL, roles: ROLE_ADMIN }
+        - { path: '^/inscriptions/*.*/update', roles: ROLE_ADMIN }
+        # Annuaire
+        - { path: '^/annuaires', methods: DEL, roles: ROLE_ADMIN }
+        - { path: '^/annuaires/ajout', roles: ROLE_ADMIN }
+        - { path: '^/annuaires/ajout', roles: ROLE_ADMIN }
 

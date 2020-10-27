@@ -8,7 +8,7 @@
 
     {% if is_granted('ROLE_ADMIN') %}
         <div class="text-right my-4">
-            <a class="btn btn-success" href="#">Ajouter</a>
+            <a class="btn btn-success" href="{{path('addTraining')}}">Ajouter</a>
         </div>
     {% endif %}
 
@@ -25,24 +25,56 @@
     {% endfor %}
 
     <div class="row">
+        {% if app.user %}
         {% for training in trainings %}
-        <div class="col-4">
+        <div class="col-4 mt-4">
             <div class="card">
                 <div class="card-body">
                     <h3>{{training.name}}</h3>
                     <p>Public cible : {{training.target}}</p>
                     <a href="{{path('displayTraining',{'training':training.id})}}" class="btn btn-success"><i class="fas fa-bars"></i></a>
-                    <a href="{{path('displayCalendar',{'training':training.id})}}" class="btn btn-success"><i class="fas fa-calendar-alt"></i>&nbsp;Voir les dates</a>
+                    {% if training.sessions|length > 0 %}
+                        <a href="{{path('displayCalendar',{'training':training.id})}}" class="btn btn-success"><i class="fas fa-calendar-alt"></i>&nbsp;Voir les dates</a>
+                    {% endif %}
                 </div>
                 <div class="card-footer text-right">
-                    <a href="#" class="btn btn-info"><i class="fas fa-edit"></i></a>
-                    <a href="#" class="btn btn-danger"><i class="fas fa-trash-alt"></i></a>
+
+                    {% if is_granted('ROLE_ADMIN') %}
+                    <a href="{{path('editTraining',{'training':training.id})}}" class="btn btn-info"><i class="fas fa-edit"></i></a>
+                    
+                    <a class="btn btn-danger" href="#" data-toggle="modal" data-target="#deleteModal{{training.id}}"><i class="far fa-trash-alt"></i></a>
+        
+                    <div class="modal" id="deleteModal{{training.id}}" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="deleteModalLabel">Suppression</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Annuler">
+                                    <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body text-center">
+                                    Êtes-vous sûr de vouloir supprimer cette formation ? 
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                                    <form method="POST" style="display:inline-block" action="{{path('deleteTraining',{'training':training.id})}}">
+                                        <input type="hidden" name="_method" value="DEL">
+                                        <input type="hidden" name="_token" value="{{csrf_token('DEL' ~ training.id)}}">
+                                        <button type="submit" class="btn btn-danger">Supprimer</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+
                 </div>
             </div>
         </div>
         {% endfor %}
+        {% endif %}
     </div>
     
-
 </div>
 {% endblock %}

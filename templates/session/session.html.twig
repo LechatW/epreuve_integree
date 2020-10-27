@@ -1,0 +1,204 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des formations{% endblock %}
+
+{% block body %}
+<div class="container">
+    <h2 class="text-center mt-4">Formation {{session.training.name}}</h2>
+    <h3>Séance {{session.name}}</h3>
+
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success">
+            {{message}}
+        </div>
+    {% endfor %}
+
+    {% for message in app.flashes('error') %}
+        <div class="alert alert-danger">
+            {{message}}
+        </div>
+    {% endfor %}
+
+    <div class="row text-center">
+        <div class="col-8">
+            <div class="card">
+                <div class="card-header">
+                    Dates et horaires
+                </div>
+                <div class="card-body">
+                    Du <span class="text-primary">{{session.startAt|date("d/m/Y à G:i")}}</span> jusqu'au <span class="text-info">{{session.endAt|date("d/m/Y à G:i")}}</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="card">
+                <div class="card-header">
+                    Gestion de la séance
+                </div>
+                <div class="card-body">
+                    {% if is_granted('ROLE_ADMIN') %}
+                    <a href="{{path('editSession',{'session':session.id,'training':session.training.id})}}" class="btn btn-primary">Editer</a>
+
+                    <a class="btn btn-danger" href="#" data-toggle="modal" data-target="#deleteModal{{session.id}}">Effacer</a>
+        
+                    <div class="modal" id="deleteModal{{session.id}}" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="deleteModalLabel">Suppression</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Annuler">
+                                    <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body text-center">
+                                    Êtes-vous sûr de vouloir supprimer cette session ? 
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                                    <form method="POST" style="display:inline-block" action="{{path('deleteSession',{'session':session.id})}}">
+                                        <input type="hidden" name="_method" value="DEL">
+                                        <input type="hidden" name="_token" value="{{csrf_token('DEL' ~ session.id)}}">
+                                        <button type="submit" class="btn btn-danger">Supprimer</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="{{path('duplicateSession',{'session':session.id})}}" class="btn btn-primary">Dupliquer</a>
+                    {% else %}
+                        Vous n'avez pas les droits pour gérer cette session
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h4>Inscriptions</h4>
+    <div class="row text-center">
+        <div class="col-3">
+            <div class="card">
+                <div class="card-header">
+                    Début d'inscription
+                </div>
+                <div class="card-body">
+                    {{session.registrationStartAt|date("d-m-Y")}}
+                </div>
+            </div>
+        </div>
+        <div class="col-3">
+            <div class="card">
+                <div class="card-header">
+                    Fin d'inscription
+                </div>
+                <div class="card-body">
+                    {{session.registrationEndAt|date("d-m-Y")}}
+                </div>
+            </div>
+        </div>
+        <div class="col-3">
+            <div class="card">
+                <div class="card-header">
+                    Nombre de places disponibles
+                </div>
+                <div class="card-body">
+                    {{session.userSessions|length}}/{{session.maxRegistration}}
+                </div>
+            </div>
+        </div>
+        <div class="col-3">
+            <div class="card">
+                <div class="card-header">
+                    Mon inscription
+                </div>
+                <div class="card-body">
+                    {% if not app.user %}
+                        L'inscription à cette formation n'est pas autorisée avec ce compte d'utilisateur
+                    {% else %}
+                        {% for userSession in app.user.userSessions|filter(userSession => userSession.session.id == session.id) %}
+                            {% if userSession.session.id == session.id %}
+                                Vous êtes actuellement inscrit à cette session
+                            {% elseif session.userSessions|length >= userSession.session.maxRegistration %}
+                                Nombre maximum d'inscription atteint
+                            {% endif %}
+                            {% else %}
+                                <a href="{{path('subscribe',{'session':session.id})}}" class="btn btn-success"><i class="fas fa-user-plus"></i></a>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-4">
+        <div class="card">
+            <div class="card-header">
+                Liste des agents inscrits
+            </div>
+            <table class="table">
+                <thead class="thead">
+                    <tr>
+                        <th scope="col">Prénom de l'agent</th>
+                        <th scope="col">Nom de l'agent</th>
+                        <th scope="col">Service</th>
+                        <th scope="col">Statut</th>
+                        <th scope="col">Validation</th>
+                        <th scope="col">Actions</th>
+                      </tr>
+                </thead>
+                <tbody class="tbody">
+                    {% for userSession in session.userSessions %}
+                        <tr>
+                            <th>{{userSession.user.firstName}}</th>
+                            <td>{{userSession.user.lastName}}</td>
+                            <td>{{userSession.user.roles|first}}</td>
+                            {% if userSession.status == 'Validé' %}
+                                <td class="text-success">{{userSession.status}}</td>
+                            {% elseif userSession.status == 'Annulé' %}
+                                <td class="text-warning">{{userSession.status}}</td>
+                            {% elseif userSession.status == 'En cours' %}
+                                <td class="text-secondary">{{userSession.status}}</td>
+                            {% endif %}
+                            <td>
+                                {% if is_granted('ROLE_ADMIN') and (userSession.status == 'En cours') %}
+                                    <a href="{{path('updateStatus',{'userSession':userSession.id,'status':"Validé"})}}" class="btn-sm btn-success"><i class="fas fa-check"></i></a>
+                                    <a href="{{path('updateStatus',{'userSession':userSession.id,'status':"Annulé"})}}" class="btn-sm btn-warning"><i class="fas fa-window-close"></i></a>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if is_granted('ROLE_ADMIN') %}
+                                <a class="btn-sm btn-danger" href="#" data-toggle="modal" data-target="#deleteModal{{userSession.id}}"><i class="far fa-trash-alt"></i></a>
+        
+                                <div class="modal" id="deleteModal{{userSession.id}}" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="deleteModalLabel">Suppression</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Annuler">
+                                                <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body text-center">
+                                                Êtes-vous sûr de vouloir supprimer cette inscription ? 
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                                                <form method="POST" style="display:inline-block" action="{{path('deleteRegistration',{'userSession':userSession.id})}}">
+                                                    <input type="hidden" name="_method" value="DEL">
+                                                    <input type="hidden" name="_token" value="{{csrf_token('DEL' ~ userSession.id)}}">
+                                                    <button type="submit" class="btn btn-danger">Supprimer</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+{% endblock %}  

@@ -2,11 +2,12 @@
 
 namespace App\Controller;
 
-use App\Entity\Session;
 use App\Entity\Training;
+use App\Form\TrainingType;
 use App\Repository\TrainingRepository;
-use App\Repository\UserSessionRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 class TrainingController extends AbstractController
@@ -24,7 +25,7 @@ class TrainingController extends AbstractController
     }
 
     /**
-     * @Route("/formations/{training}", name="displayTraining")
+     * @Route("/formations/{training}", name="displayTraining", requirements={"training":"\d+"})
      */
     public function displayTraining(Training $training)
     {
@@ -34,35 +35,57 @@ class TrainingController extends AbstractController
     }
 
     /**
-     * @Route("/formations/{training}/sessions/{session}", name="displaySession")
+     * @Route("/formations/ajout", name="addTraining", methods="GET|POST")
+     * @Route("/formations/{training}/edition", name="editTraining", methods="GET|POST", requirements={"training":"\d+"})
      */
-    public function displaySession(Training $training, Session $session, UserSessionRepository $userSessionRepository)
-    {   
-        return $this->render('training/session.html.twig', [
+    public function editOrAddTraining(Training $training = null, Request $request, EntityManagerInterface $entityManager)
+    {
+        $isModif = true;
+
+        if(!$training) {
+            $training = new Training();
+            $isModif = false;
+        }
+
+        $form = $this->createForm(TrainingType::class, $training);
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()) {
+            $training->setContact($this->getUser());
+            $entityManager->persist($training);
+            $entityManager->flush();
+
+            if($isModif) {
+                $this->addFlash("success","La modification a bien été effectuée");
+            } else {
+                $this->addFlash("success","L'ajout a bien été effectué");
+            }
+
+            return $this->redirectToRoute('displayTrainings');
+        }
+        
+        return $this->render('training/editOrAddTraining.html.twig', [
             'training' => $training,
-            'session' => $session,
+            'form' => $form->createView()
         ]);
     }
 
     /**
-     * @Route("/formations/{training}/calendar", name="displayCalendar")
+     * @Route("/formations/{training}/suppression",name="deleteTraining", methods="DEL", requirements={"training":"\d+"})
      */
-    public function displayCalendar(Training $training)
+    public function deleteTraining(Training $training, Request $request, EntityManagerInterface $entityManager)
     {
-        $sessions = $training->getSessions()->toArray();
-
-        foreach ($sessions as $session) {
-            $datas[] = [
-                "title" => $session->getName(),
-                "start" => $session->getStartAt()->format('Y-m-d H:i:s'),
-                "end" => $session->getEndAt()->format('Y-m-d H:i:s')
-            ];
+        if($this->isCsrfTokenValid("DEL". $training->getId(),$request->get('_token'))) {
+            $entityManager->remove($training);
+            $entityManager->flush();
+            
+            $this->addFlash("success","La suppression a bien été effectuée");
+            
+            return $this->redirectToRoute("displayTrainings");
         }
 
-        $data = json_encode($datas);
+        $this->addFlash("error","Une erreur est survenue lors de la suppression d'une formation");
 
-        return $this->render('training/calendar.html.twig', [
-            'data' => ($data)
-        ]);
+        return $this->redirectToRoute('displayTrainings');
     }
 }

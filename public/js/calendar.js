@@ -3,6 +3,7 @@ window.onload = () => {
     let calendar = new FullCalendar.Calendar(calendarEl, {
         themeSystem: 'bootstrap',
         locale: 'fr',
+        initialDate: calendarEl.dataset.view,
         headerToolbar: {
             start: 'prev next today',
             center: 'title',

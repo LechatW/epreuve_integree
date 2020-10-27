@@ -26,7 +26,7 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
                     <li 
-                    {% if route_name matches '{^displayPhonebook}' %} 
+                    {% if route_name matches '{^.*Phonebook*.$}' %} 
                         class="nav-item active"
                     {% else %}
                         class="nav-item"
@@ -35,7 +35,7 @@
                         <a class="nav-link" href="{{path('displayPhonebooks')}}">Annuaires</a>
                     </li>
                     <li 
-                    {% if route_name matches '{^displayNumber}' %} 
+                    {% if route_name matches '{^.*Number*.$}' %} 
                         class="nav-item active"
                     {% else %}
                         class="nav-item"
@@ -44,7 +44,7 @@
                         <a class="nav-link" href="{{path('displayNumbers')}}">Numéros</a>
                     </li>
                     <li 
-                    {% if route_name matches '{^displayNumber}' %} 
+                    {% if route_name matches '{^.*Training|Calendar|Session*.$}' %} 
                         class="nav-item active"
                     {% else %}
                         class="nav-item"

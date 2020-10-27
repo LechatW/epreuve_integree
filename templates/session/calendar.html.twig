@@ -9,12 +9,13 @@
         integrity="sha256-uq9PNlMzB+1h01Ij9cx7zeE2OR2pLAfRw3uUUOOPKdA=" 
         crossorigin="anonymous"
     >
+    <link rel="stylesheet" href="{{asset('css/calendar.css')}}">
 {% endblock %}
 
 {% block body %}
     <div class="container">
         <h2 class="text-center mt-4">Calendrier des séances</h2>
-        <div id="calendar" data-sessions="{{data}}"></div>
+        <div id="calendar" data-sessions="{{data}}" data-view="{{defaultDate}}"></div>
     </div>
 {% endblock %}
 

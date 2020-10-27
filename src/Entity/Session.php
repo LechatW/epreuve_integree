@@ -60,7 +60,7 @@ class Session
     private $maxRegistration;
 
     /**
-     * @ORM\OneToMany(targetEntity=UserSession::class, mappedBy="session")
+     * @ORM\OneToMany(targetEntity=UserSession::class, mappedBy="session", cascade={"persist", "remove"})
      */
     private $userSessions;
 
