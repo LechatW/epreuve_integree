@@ -14,30 +14,36 @@ class UserSessionController extends AbstractController
     /**
      * @Route("/inscriptions/{session}/inscription", name="subscribe", requirements={"session":"\d+"})
      */
-    public function subscribe(Session $session, EntityManagerInterface $entityManager)
+    public function subscribe(Session $session = null, EntityManagerInterface $entityManager)
     {
-        $userSession = new UserSession();
-        $userSession->setUser($this->getUser())
-                    ->setSession($session)
-                    ->setStatus("En cours")
-        ;
+        if($session) {
+            $userSession = new UserSession();
+            $userSession->setUser($this->getUser())
+                        ->setSession($session)
+                        ->setStatus("En cours")
+            ;
+    
+            if($session->getUserSessions()->count() < $session->getMaxRegistration()) {
+                $entityManager->persist($userSession);
+                $entityManager->flush();
+    
+                $this->addFlash("success","L'inscription a bien été effectuée");
+    
+                return $this->redirectToRoute('displaySession', [
+                    'session' => $session->getId()
+                ]);
+            }
 
-        if($session->getUserSessions()->count() < $session->getMaxRegistration()) {
-            $entityManager->persist($userSession);
-            $entityManager->flush();
-
-            $this->addFlash("success","L'inscription a bien été effectuée");
+            $this->addFlash("error","Nombre maximum d'inscription déjà atteint");
 
             return $this->redirectToRoute('displaySession', [
                 'session' => $session->getId()
             ]);
         }
 
-        $this->addFlash("error","Nombre maximum d'inscription déjà atteint");
+        $this->addFlash("error","Session introuvable");
 
-        return $this->redirectToRoute('displaySession', [
-            'session' => $session->getId()
-        ]);
+        return $this->redirectToRoute('displayTrainings');
     }
 
     /**

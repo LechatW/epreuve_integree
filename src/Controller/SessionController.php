@@ -17,11 +17,11 @@ class SessionController extends AbstractController
     /**
      * @Route("/formations/{training}/calendar", name="displayCalendar", requirements={"training":"\d+"})
      */
-    public function displayCalendar(Training $training, SessionRepository $sessionRepository)
+    public function displayCalendar(Training $training = null, SessionRepository $sessionRepository)
     {
         $sessions = $sessionRepository->findByTrainingOrderByDate($training);
         
-        if(!empty($sessions)) {
+        if($sessions) {
             $defaultDate = $sessions[0]->getStartAt()->format('Y-m-d');
 
             foreach ($sessions as $session) {
@@ -39,6 +39,8 @@ class SessionController extends AbstractController
                 'defaultDate' => $defaultDate
             ]);
         }
+
+        $this->addFlash("error","Sessions introuvable");
 
         return $this->redirectToRoute('displayTraining', [
             'training' => $training->getId()
@@ -91,11 +93,17 @@ class SessionController extends AbstractController
     /**
      * @Route("/sessions/{session}", name="displaySession")
      */
-    public function displaySession(Session $session)
+    public function displaySession(Session $session = null)
     {   
-        return $this->render('session/session.html.twig', [
-            'session' => $session
-        ]);
+        if($session) {
+            return $this->render('session/session.html.twig', [
+                'session' => $session
+            ]);
+        }
+
+        $this->addFlash("error", "Session introuvable");
+
+        return $this->redirectToRoute('displayTrainings');
     }
 
     /**
@@ -124,27 +132,33 @@ class SessionController extends AbstractController
     /**
      * @Route("/sessions/{session}/duplication", name="duplicateSession", requirements={"session":"\d+"})
      */
-    public function duplicateSession(Session $session, EntityManagerInterface $entityManager)
+    public function duplicateSession(Session $session = null, EntityManagerInterface $entityManager)
     {
-        $newSession = new Session();
+        if($session) {
+            $newSession = new Session();
 
-        $newSession->setName($session->getName())
-                   ->setStartAt($session->getStartAt())
-                   ->setEndAt($session->getEndAt())
-                   ->setRegistrationStartAt($session->getRegistrationStartAt())
-                   ->setRegistrationEndAt($session->getRegistrationEndAt())
-                   ->setLocation($session->getLocation())
-                   ->setMaxRegistration($session->getMaxRegistration())
-                   ->setTraining($session->getTraining())
-        ;
+            $newSession->setName($session->getName(). "-Clone")
+            ->setStartAt($session->getStartAt())
+            ->setEndAt($session->getEndAt())
+            ->setRegistrationStartAt($session->getRegistrationStartAt())
+            ->setRegistrationEndAt($session->getRegistrationEndAt())
+            ->setLocation($session->getLocation())
+            ->setMaxRegistration($session->getMaxRegistration())
+            ->setTraining($session->getTraining())
+            ;
 
-        $entityManager->persist($newSession);
-        $entityManager->flush();
+            $entityManager->persist($newSession);
+            $entityManager->flush();
 
-        $this->addFlash("success","La duplication a bien été effectuée");
-            
-        return $this->redirectToRoute('displayTraining', [
-            'training' => $session->getTraining()->getId()
-        ]);
+            $this->addFlash("success","La duplication a bien été effectuée");
+                
+            return $this->redirectToRoute('displayTraining', [
+                'training' => $session->getTraining()->getId()
+            ]);
+        }
+
+        $this->addFlash("error", "La duplication n'a pas pu être effectuée");
+
+        return $this->redirectToRoute('displayTrainings');
     }
 }

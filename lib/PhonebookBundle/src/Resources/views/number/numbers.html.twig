@@ -25,6 +25,7 @@
             <tr>
                 <th scope="col">Nom</th>
                 <th scope="col">Tél.</th>
+                <th scope="col">Type</th>
                 <th scope="col">Annuaires</th>
             </tr>
         </thead>
@@ -39,6 +40,7 @@
                         <a href="{{path('call',{'number':number.id})}}">{{number.phoneNumber}}</a>
                     {% endif %}
                 </td>
+                <td>{{number.type}}</td>
                 <td>
                     {% for phonebook in number.phonebooks %}
                         {% if is_granted(phonebook.rolesManagement|first) or is_granted('ROLE_ADMIN') %}

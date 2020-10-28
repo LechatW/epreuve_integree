@@ -14,6 +14,7 @@
                 <tr>
                     <th scope="col">Nom</th>
                     <th scope="col">Tél.</th>
+                    <th scope="col">Type</th>
                     <th scope="col">Ajout</th>
                 </tr>
             </thead>
@@ -22,6 +23,7 @@
                 <tr scope="row">
                     <td>{{number.name}}</td>
                     <td>{{number.phoneNumber}}</td>
+                    <td>{{number.type}}</td>
                     <td><input type="checkbox" name="number[]" value="{{number.id}}"></td>
                 </tr>
             {% endfor %}
@@ -33,7 +35,15 @@
         </div>
 
         <div class="form-group row justify-content-center mt-4">
-            <input type="tel" name="numberName" class="form-control col-4" placeholder="Nom d'un nouveau numéro">
+            <input type="text" name="numberName" class="form-control col-4" placeholder="Nom d'un nouveau numéro">
+        </div>
+
+        <div class="form-group row justify-content-center mt-4">
+            <select class="form-control col-4" name="types">
+                <option value="">--Choisissez--</option>
+                <option value="Privé">Privé</option>
+                <option value="Professionnel">Professionnel</option>
+            </select>
         </div>
         
         <div class="row justify-content-end mr-4">

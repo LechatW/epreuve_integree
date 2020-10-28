@@ -22,8 +22,6 @@ security:
                 path: logout
                 target: displayPhonebooks
     access_control:
-        # All
-        - { path: '^/formations|^/sessions|^/inscriptions|^/annuaires|^/numeros|^/appel|^/export', roles: ROLE_USER }
         # Script
         - { path: '^/script', ip: 127.0.0.1 }
         # Formation
@@ -42,4 +40,6 @@ security:
         - { path: '^/annuaires', methods: DEL, roles: ROLE_ADMIN }
         - { path: '^/annuaires/ajout', roles: ROLE_ADMIN }
         - { path: '^/annuaires/ajout', roles: ROLE_ADMIN }
+        # All
+        - { path: '^/formations|^/sessions|^/inscriptions|^/annuaires|^/numeros|^/appel|^/export', roles: ROLE_USER }
 

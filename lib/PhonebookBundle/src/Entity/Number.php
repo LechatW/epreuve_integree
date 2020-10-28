@@ -8,10 +8,12 @@ use ZHC\PhonebookBundle\Entity\Phone;
 use App\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass=NumberRepository::class)
+ * @UniqueEntity(fields={"phoneNumber"}, message="Numéro déjà existant")
  */
 class Number
 {

@@ -10,9 +10,11 @@ use ZHC\PhonebookBundle\Entity\Number;
 use ZHC\PhonebookBundle\Entity\Phone;
 use App\Repository\UserRepository;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
+ * @UniqueEntity(fields={"login"}, message="Login déjà existant")
  */
 class User implements UserInterface
 {
@@ -24,7 +26,7 @@ class User implements UserInterface
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, unique=true)
      */
     private $login;
 

@@ -120,11 +120,12 @@ class NumberController extends AbstractController
                             $entityManager->persist($number);
                         }
                     } 
-                    if(!empty($_POST['newNumber']) && !empty($_POST['numberName'])) {
+                    if(!empty($_POST['newNumber']) && !empty($_POST['numberName']) && !empty($_POST['numberType'])) {
                         $newNumber = new Number();
 
                         $newNumber->setName($_POST['numberName'])
                                   ->setPhoneNumber($_POST['newNumber'])
+                                  ->setType($_POST['numberType'])
                                   ->addPhonebook($phonebook)
                         ;
                         $entityManager->persist($newNumber);

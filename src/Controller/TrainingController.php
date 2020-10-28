@@ -19,19 +19,31 @@ class TrainingController extends AbstractController
     {
         $trainings = $repository->findAll();
 
-        return $this->render('training/trainings.html.twig', [
-            'trainings' => $trainings
-        ]);
+        if($trainings) {
+            return $this->render('training/trainings.html.twig', [
+                'trainings' => $trainings
+            ]);
+        }
+
+        $this->addFlash("error", "Formations introuvable");
+
+        return $this->redirectToRoute('displayPhonebooks');
     }
 
     /**
      * @Route("/formations/{training}", name="displayTraining", requirements={"training":"\d+"})
      */
-    public function displayTraining(Training $training)
+    public function displayTraining(Training $training = null)
     {
-        return $this->render('training/training.html.twig', [
-            'training' => $training
-        ]);
+        if($training) {
+            return $this->render('training/training.html.twig', [
+                'training' => $training
+            ]);
+        }
+
+        $this->addFlash("error", "Formation introuvable");
+
+        return $this->redirectToRoute('displayTrainings');
     }
 
     /**
