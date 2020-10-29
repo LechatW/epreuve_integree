@@ -8,6 +8,12 @@
         <h2>Liste des numéros</h2>
     </div>
 
+    {% for message in app.flashes('error') %}
+        <div class="alert alert-danger">
+            {{message}}
+        </div>
+    {% endfor %}
+
     <form method="POST" action="{{path('addNumber',{'phonebook':phonebook.id})}}">
         <table class="table mt-4">
             <thead>
@@ -30,20 +36,21 @@
             </tbody>
         </table>
 
-        <div class="form-group row justify-content-center mt-4">
-            <input type="tel" name="newNumber" class="form-control col-4" placeholder="Créer un nouveau numéro">
-        </div>
-
-        <div class="form-group row justify-content-center mt-4">
-            <input type="text" name="numberName" class="form-control col-4" placeholder="Nom d'un nouveau numéro">
-        </div>
-
-        <div class="form-group row justify-content-center mt-4">
-            <select class="form-control col-4" name="types">
-                <option value="">--Choisissez--</option>
-                <option value="Privé">Privé</option>
-                <option value="Professionnel">Professionnel</option>
-            </select>
+        <div id="subForm">
+            <div class="form-group row justify-content-center mt-4">
+                <input type="tel" name="newNumber" class="form-control col-4" placeholder="Créer un nouveau numéro">
+            </div>
+    
+            <div class="form-group row justify-content-center mt-4">
+                <input type="text" name="numberName" class="form-control col-4" placeholder="Nom d'un nouveau numéro">
+            </div>
+    
+            <div class="form-group row justify-content-center mt-4">
+                <select class="form-control col-4" name="numberType">
+                    <option value="Professionnel">Professionnel</option>
+                    <option value="Privé">Privé</option>
+                </select>
+            </div>
         </div>
         
         <div class="row justify-content-end mr-4">
@@ -52,4 +59,7 @@
     </form>
     
 </div>
+
+<script src="{{asset('js/require_management.js')}}"></script>
+
 {% endblock %}

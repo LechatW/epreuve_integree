@@ -27,3 +27,5 @@ function addField(option) {
 
     addElement(option + '-fields-list','div','field-' + fieldId, html);
 }
+
+window.onload(document.querySelectorAll("fieldset").forEach(element => element.remove()));   

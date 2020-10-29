@@ -20,7 +20,7 @@ class NumberType extends AbstractType
             ->add('name', TextType::class, [
                 'label' => "Nom"
             ])
-            ->add('numberType', ChoiceType::class, [
+            ->add('type', ChoiceType::class, [
                 'label' => "Type de numéro",
                 'choices' => [
                     "Privé" => "Privé",

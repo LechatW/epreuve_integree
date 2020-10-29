@@ -48,7 +48,9 @@
                     {% endfor %}
                 </td>
                 <td class="row">
-                    {% if not app.user or app.user.id == number.user.id %}
+                    {% if number.user is null %}
+                        {{number.phoneNumber}}
+                    {% elseif not app.user or app.user.id == number.user.id %}
                         {{number.phoneNumber}}
                     {% else %}
                         <a href="{{path('call',{'number':number.id})}}">{{number.phoneNumber}}</a>
