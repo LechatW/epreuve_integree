@@ -24,7 +24,7 @@ security:
     access_control:
         # Script
         - { path: '^/script', ip: 127.0.0.1 }
-        # Formation
+        # Training
         - { path: '^/formations', methods: DEL, roles: ROLE_ADMIN }
         - { path: '^/formations/ajout', roles: ROLE_ADMIN }
         - { path: '^/formations/*.*/edition', roles: ROLE_ADMIN }
@@ -33,10 +33,10 @@ security:
         - { path: '^/sessions/ajout', roles: ROLE_ADMIN }
         - { path: '^/sessions/*.*/duplication', roles: ROLE_ADMIN }
         - { path: '^/sessions/*.*/edition', roles: ROLE_ADMIN }
-        # Inscription
+        # UserSession
         - { path: '^/inscriptions', methods: DEL, roles: ROLE_ADMIN }
         - { path: '^/inscriptions/*.*/update', roles: ROLE_ADMIN }
-        # Annuaire
+        # Phonebook
         - { path: '^/annuaires', methods: DEL, roles: ROLE_ADMIN }
         - { path: '^/annuaires/ajout', roles: ROLE_ADMIN }
         - { path: '^/annuaires/ajout', roles: ROLE_ADMIN }

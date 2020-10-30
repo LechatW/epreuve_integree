@@ -18,13 +18,13 @@ class UserSession
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="users")
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="userSessions")
      * @ORM\JoinColumn(nullable=false)
      */
     private $user;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Session::class, inversedBy="sessions")
+     * @ORM\ManyToOne(targetEntity=Session::class, inversedBy="userSessions")
      * @ORM\JoinColumn(nullable=false)
      */
     private $session;

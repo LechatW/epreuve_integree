@@ -106,74 +106,82 @@ class NumberController extends AbstractController
         $rolesLength = count($roles);
         $rolesManagement = $phonebook->getRolesManagement();
         $isValid = false;
-
-        for($i=0; $i < $rolesLength; $i++) {
-            // Vérification du rôle
+        $isAuthorized = false;
+        $i = 0; 
+    
+        // Vérification du rôle
+        while($i < $rolesLength && (!in_array($roles[$i],$rolesManagement) || !in_array('ROLE_ADMIN',$roles))) {
             if(in_array($roles[$i],$rolesManagement) || in_array('ROLE_ADMIN',$roles)) {
-                $numbers = $repository->findNotInPhonebook($phonebook->getId());
+                $isAuthorized = true;
+            }
+            $i++;
+        }
 
-                // Si le formulaire a été soumis
-                if(!empty($_POST)) {
-                    // Si un numéro a été coché
-                    if(!empty($_POST['number'])) {
-                        foreach($_POST['number'] as $id) {
-                            $number = $repository->findOneBy([
-                                'id' => $id
-                            ]);
-                            $phonebook->addNumber($number);
-                            $entityManager->persist($number);
-                        }
-                        $isValid = true;
-                    } 
+        if($isAuthorized) {
+            $numbers = $repository->findNotInPhonebook($phonebook->getId());
 
-                    // Si on ajoute un nouveau numéro
-                    if(!empty($_POST['newNumber']) && !empty($_POST['numberName']) && !empty($_POST['numberType'])) {
-                        $newNumber = new Number();
+            // Si le formulaire a été soumis
+            if(!empty($_POST)) {
 
-                        $newNumber->setName($_POST['numberName'])
-                                    ->setPhoneNumber($_POST['newNumber'])
-                                    ->setType($_POST['numberType'])
-                                    ->addPhonebook($phonebook)
-                        ;
-                        $entityManager->persist($newNumber);
-                        $isValid = true;
-                    }
-
-                    // Si on valide le formulaire vide
-                    if(!empty($_POST) && empty($_POST['newNumber']) && empty($_POST['numberName']) && empty($_POST['numberType']) && empty($_POST['number'])) {
-                        $isValid = false;
-                    }
-
-                    if($isValid) {
-                        $entityManager->flush();
-                                
-                        $this->addFlash("success","L'ajout a bien été effectué");
-
-                        return $this->redirectToRoute('displayPhonebook', [
-                            'phonebook' => $phonebook->getId()
+                // Si un numéro a été coché
+                if(!empty($_POST['number'])) {
+                    foreach($_POST['number'] as $id) {
+                        $number = $repository->findOneBy([
+                            'id' => $id
                         ]);
-                    } else {
-                        $this->addFlash("error","Veuillez sélectionner ou créer un numéro");
-
-                        return $this->render('number/addNumber.html.twig', [
-                            'numbers' => $numbers,
-                            'phonebook' => $phonebook
-                        ]);
+                        $phonebook->addNumber($number);
+                        $entityManager->persist($number);
                     }
+                    $isValid = true;
+                } 
+
+                // Si on ajoute un nouveau numéro
+                if(!empty($_POST['newNumber']) && !empty($_POST['numberName']) && !empty($_POST['numberType'])) {
+                    $newNumber = new Number();
+
+                    $newNumber->setName($_POST['numberName'])
+                                ->setPhoneNumber($_POST['newNumber'])
+                                ->setType($_POST['numberType'])
+                                ->addPhonebook($phonebook)
+                    ;
+                    $entityManager->persist($newNumber);
+                    $isValid = true;
+                }
+
+                // Si on valide le formulaire vide
+                if(!empty($_POST) && empty($_POST['newNumber']) && empty($_POST['numberName']) && empty($_POST['numberType']) && empty($_POST['number'])) {
+                    $isValid = false;
+                }
+
+                if($isValid) {
+                    $entityManager->flush();
+                            
+                    $this->addFlash("success","L'ajout a bien été effectué");
+
+                    return $this->redirectToRoute('displayPhonebook', [
+                        'phonebook' => $phonebook->getId()
+                    ]);
                 } else {
+                    $this->addFlash("error","Veuillez sélectionner ou créer un numéro");
+
                     return $this->render('number/addNumber.html.twig', [
                         'numbers' => $numbers,
                         'phonebook' => $phonebook
                     ]);
                 }
-
             } else {
-                $this->addFlash("error","Vous n'avez pas l'autorisation pour ajouter un numéro");
-        
-                return $this->redirectToRoute('displayPhonebook', [
-                    'phonebook' => $phonebook->getId()
+                return $this->render('number/addNumber.html.twig', [
+                    'numbers' => $numbers,
+                    'phonebook' => $phonebook
                 ]);
             }
+        } else {
+            $this->addFlash("error","Vous n'avez pas l'autorisation pour ajouter un numéro");
+    
+            return $this->redirectToRoute('displayPhonebook', [
+                'phonebook' => $phonebook->getId()
+            ]);
         }
     }
+    
 }

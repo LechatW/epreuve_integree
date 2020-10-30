@@ -52,26 +52,32 @@ class PhonebookController extends AbstractController
     /**
      * @Route("/annuaires/{phonebook}", name="displayPhonebook")
      */
-    public function displayPhonebook(Phonebook $phonebook)
+    public function displayPhonebook(Phonebook $phonebook = null)
     {
-        $roles = $this->getUser()->getRoles();
-        $rolesLength = count($roles);
-        $rolesVisibility = $phonebook->getRolesVisibility();
-        $rolesManagement = $phonebook->getRolesManagement();
-
-        for($i=0; $i<$rolesLength; $i++) {
-            if(in_array($roles[$i],$rolesVisibility) || in_array($roles[$i],$rolesManagement) || 
-                in_array('ROLE_USER',$rolesVisibility) || in_array('ROLE_ADMIN',$roles)) {
-                $numbers = $phonebook->getNumbers();
-
-                return $this->render('phonebook/phonebook.html.twig', [
-                    'phonebook' => $phonebook,
-                    'numbers' => $numbers
-                ]);
-            } else {
-                return $this->redirectToRoute('displayPhonebooks');
+        if($phonebook) {
+            $roles = $this->getUser()->getRoles();
+            $rolesLength = count($roles);
+            $rolesVisibility = $phonebook->getRolesVisibility();
+            $rolesManagement = $phonebook->getRolesManagement();
+    
+            for($i=0; $i<$rolesLength; $i++) {
+                if(in_array($roles[$i],$rolesVisibility) || in_array($roles[$i],$rolesManagement) || 
+                    in_array('ROLE_USER',$rolesVisibility) || in_array('ROLE_ADMIN',$roles)) {
+                    $numbers = $phonebook->getNumbers();
+    
+                    return $this->render('phonebook/phonebook.html.twig', [
+                        'phonebook' => $phonebook,
+                        'numbers' => $numbers
+                    ]);
+                } else {
+                    return $this->redirectToRoute('displayPhonebooks');
+                }
             }
         }
+
+        $this->addFlash("error","Annuaire introuvable");
+
+        return $this->redirectToRoute('displayPhonebooks');
     }
 
     /**
