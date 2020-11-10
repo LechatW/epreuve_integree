@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Training;
 use App\Entity\Session;
 use App\Form\SessionType;
+use App\Repository\HolidayRepository;
 use App\Repository\SessionRepository;
 use App\Repository\TrainingRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -17,20 +18,32 @@ class SessionController extends AbstractController
     /**
      * @Route("/formations/{training}/calendar", name="displayCalendar", requirements={"training":"\d+"})
      */
-    public function displayCalendar(Training $training = null, SessionRepository $sessionRepository)
+    public function displayCalendar(Training $training = null, SessionRepository $sessionRepository, HolidayRepository $holidayRepository)
     {
         $sessions = $sessionRepository->findByTrainingOrderByDate($training);
+        $holidays = $holidayRepository->findAll();
+        
+        foreach($holidays as $holiday) {
+            $date[] = $holiday->getDate()->format('Ymd');
+        }
         
         if($sessions) {
             $defaultDate = $sessions[0]->getStartAt()->format('Y-m-d');
-
+            
             foreach ($sessions as $session) {
                 $datas[] = [
                     "title" => $session->getName(),
-                    "start" => $session->getStartAt()->format('Y-m-d H:i:s'),
-                    "end" => $session->getEndAt()->format('Y-m-d H:i:s')
+                    "rrule" => 
+                    "DTSTART:".$session->getStartAt()->format('Ymd').
+                    "\nRRULE:FREQ=".$session->getFrequency().
+                    ";UNTIL=".$session->getEndAt()->format('Ymd').
+                    ";INTERVAL=".$session->getFrequencyInterval().
+                    ";BYDAY=".implode(',',$session->getDays()).
+                    "\nEXDATE:".implode("\nEXDATE:",$date)
                 ];
             }
+
+            //dd($datas);
     
             $data = json_encode($datas);
     
@@ -45,6 +58,7 @@ class SessionController extends AbstractController
         return $this->redirectToRoute('displayTraining', [
             'training' => $training->getId()
         ]);
+
     }
 
     /**

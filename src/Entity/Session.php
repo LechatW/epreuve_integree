@@ -71,6 +71,21 @@ class Session
      */
     private $userSessions;
 
+    /**
+     * @ORM\Column(type="string", length=30, nullable=true)
+     */
+    private $frequency;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $frequencyInterval;
+
+    /**
+     * @ORM\Column(type="array", nullable=true)
+     */
+    private $days = [];
+
     public function __construct()
     {
         $this->userSessions = new ArrayCollection();
@@ -200,6 +215,42 @@ class Session
         if ($this->userSessions->contains($userSession)) {
             $this->userSessions->removeElement($userSession);
         }
+
+        return $this;
+    }
+
+    public function getFrequency(): ?string
+    {
+        return $this->frequency;
+    }
+
+    public function setFrequency(?string $frequency): self
+    {
+        $this->frequency = $frequency;
+
+        return $this;
+    }
+
+    public function getFrequencyInterval(): ?int
+    {
+        return $this->frequencyInterval;
+    }
+
+    public function setFrequencyInterval(?int $frequencyInterval): self
+    {
+        $this->frequencyInterval = $frequencyInterval;
+
+        return $this;
+    }
+
+    public function getDays(): ?array
+    {
+        return $this->days;
+    }
+
+    public function setDays(?array $days): self
+    {
+        $this->days = $days;
 
         return $this;
     }

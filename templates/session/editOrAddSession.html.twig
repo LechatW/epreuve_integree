@@ -32,6 +32,22 @@
                     {{form_row(form.maxRegistration)}}
                 </div>
             </div>
+            <div class="form-check mb-2">
+                <input type="checkbox" class="form-check-input" id="isRecurrence">
+                <label class="form-check-label" for="isRecurrence">Répéter ?</label>
+            </div>
+
+            <div class="row recurrency">
+                <div class="col">
+                    {{form_row(form.frequency)}}
+                </div>
+                <div class="col">
+                    {{form_row(form.frequencyInterval)}}
+                </div>
+                <div class="col">
+                    {{form_row(form.days)}}
+                </div>
+            </div>
 
             <div class="row justify-content-end mr-4">
                 <input class="text-right btn btn-primary" type="submit" value="Valider">
@@ -40,4 +56,6 @@
         </div>
     </div>
 </div>
+
+<script src="{{asset('js/recurrence_fields.js')}}"></script>
 {% endblock %}

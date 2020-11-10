@@ -26,7 +26,8 @@
                     Dates et horaires
                 </div>
                 <div class="card-body">
-                    Du <span class="text-primary">{{session.startAt|date("d/m/Y à G:i")}}</span> jusqu'au <span class="text-info">{{session.endAt|date("d/m/Y à G:i")}}</span>
+                    Du <span class="text-primary">{{session.startAt|date("d/m/Y")}}</span> jusqu'au <span class="text-info">{{session.endAt|date("d/m/Y")}}</span>
+                    de {{session.startAt|date("G:i")}} à {{session.endAt|date("G:i")}}
                 </div>
             </div>
         </div>

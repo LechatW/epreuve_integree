@@ -3,11 +3,12 @@ window.onload = () => {
     let calendar = new FullCalendar.Calendar(calendarEl, {
         themeSystem: 'bootstrap',
         locale: 'fr',
+        weekends: false,
         initialDate: calendarEl.dataset.view,
         headerToolbar: {
-            start: 'prev next today',
-            center: 'title',
-            end: 'dayGridMonth timeGridWeek timeGridDay'
+            start: 'title',
+            end: 'prev next today',
+            middle: ''
         },
         buttonText: {
             today: 'Aujourd\'hui',
@@ -15,7 +16,7 @@ window.onload = () => {
             timeGridWeek: 'Semaine',
             timeGridDay: 'Jour'
         },
-        events: JSON.parse(calendarEl.dataset.sessions),
+        events: JSON.parse(calendarEl.dataset.sessions)
     });
     calendar.render();
 }

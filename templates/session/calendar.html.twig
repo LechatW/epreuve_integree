@@ -20,10 +20,14 @@
 {% endblock %}
 
 {% block javascripts %}
-    <script 
-        src="https://cdn.jsdelivr.net/npm/fullcalendar@5.3.2/main.min.js" 
-        integrity="sha256-mMw9aRRFx9TK/L0dn25GKxH/WH7rtFTp+P9Uma+2+zc=" 
-        crossorigin="anonymous">
-    </script>
+    <!-- rrule lib -->
+    <script src='https://cdn.jsdelivr.net/npm/rrule@2.6.4/dist/es5/rrule.min.js'></script>
+
+    <!-- fullcalendar bundle -->
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.2.0/main.min.js'></script>
+
+    <!-- the rrule-to-fullcalendar connector -->
+    <script src='https://cdn.jsdelivr.net/npm/@fullcalendar/rrule@5.2.0/main.global.min.js'></script>
+
     <script src="{{asset('js/calendar.js')}}"></script>
 {% endblock %}

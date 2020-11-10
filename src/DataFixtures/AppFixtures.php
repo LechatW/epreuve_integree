@@ -2,6 +2,7 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\Holiday;
 use App\Entity\Session;
 use App\Entity\Training;
 use ZHC\PhonebookBundle\Entity\Number;
@@ -169,24 +170,30 @@ class AppFixtures extends Fixture
              */
             $session1 = new Session();
             $session1->setName('Ambulance T0-01')
-                     ->setStartAt(new DateTime('2020-11-14 08:00'))
-                     ->setEndAt(new DateTime('2020-11-14 16:00'))
+                     ->setStartAt(new DateTime('2020-12-01 08:00'))
+                     ->setEndAt(new DateTime('2021-02-01 16:00'))
                      ->setRegistrationStartAt(new DateTime('2020-10-01'))
                      ->setRegistrationEndAt(new DateTime('2020-11-05'))
                      ->setLocation('Mons')
                      ->setMaxRegistration(10)
+                     ->setFrequency('MONTHLY')
+                     ->setFrequencyInterval(1)
+                     ->setDays(['1MO','1FR'])
                      ->setTraining($training1)
             ;
             $manager->persist($session1);
 
             $session2 = new Session();
             $session2->setName('Ambulance T0-02')
-                     ->setStartAt(new DateTime('2020-11-16 08:00'))
-                     ->setEndAt(new DateTime('2020-11-16 16:00'))
+                     ->setStartAt(new DateTime('2020-12-02 08:00'))
+                     ->setEndAt(new DateTime('2021-02-02 16:00'))
                      ->setRegistrationStartAt(new DateTime('2020-10-02'))
                      ->setRegistrationEndAt(new DateTime('2020-11-06'))
                      ->setLocation('Mons')
                      ->setMaxRegistration(10)
+                     ->setFrequency('MONTHLY')
+                     ->setFrequencyInterval(1)
+                     ->setDays(['2TU'])
                      ->setTraining($training1)
             ;
             $manager->persist($session2);
@@ -194,11 +201,13 @@ class AppFixtures extends Fixture
             $session3 = new Session();
             $session3->setName('Caméra T0-01')
                      ->setStartAt(new DateTime('2020-12-01 08:00'))
-                     ->setEndAt(new DateTime('2020-12-01 16:00'))
+                     ->setEndAt(new DateTime('2021-01-01 16:00'))
                      ->setRegistrationStartAt(new DateTime('2020-11-01'))
                      ->setRegistrationEndAt(new DateTime('2020-11-09'))
                      ->setLocation('La louvière')
                      ->setMaxRegistration(8)
+                     ->setFrequency('MONTHLY')
+                     ->setFrequencyInterval(1)
                      ->setTraining($training2)
             ;
             $manager->persist($session3);
@@ -230,7 +239,22 @@ class AppFixtures extends Fixture
                          ->setStatus('Annulé')
             ;
             $manager->persist($userSession1);
-            
+
+            /**
+             * Holidays
+             */
+            $holiday1 = new Holiday();
+            $holiday1->setName('Armistice')
+                     ->setDate(new DateTime('2020-11-11'))
+            ;
+            $manager->persist($holiday1);
+
+            $holiday2 = new Holiday();
+            $holiday2->setName('Noel')
+                     ->setDate(new DateTime('2020-12-25'))
+            ;
+            $manager->persist($holiday2);
+
             $manager->flush();
       }
 }

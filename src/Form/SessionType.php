@@ -4,11 +4,15 @@ namespace App\Form;
 
 use App\Entity\Session;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class SessionType extends AbstractType
@@ -42,6 +46,40 @@ class SessionType extends AbstractType
             ])
             ->add('maxRegistration', IntegerType::class, [
                 'label' => "Nombre de places"
+            ])
+            ->add('frequency', ChoiceType::class, [
+                'label' => "Fréquence",
+                'choices' => [
+                    'Hebdomadaire' => 'WEEKLY',
+                    'Mensuel' => 'MONTHLY'
+                ],
+                'empty_data' => '',
+                'required' => false,
+                'attr' => [
+                    'class' => 'recurrency_input'
+                ]
+            ])
+            ->add('frequencyInterval', IntegerType::class, [
+                'label' => 'Interval',
+                'required' => false,
+                'attr' => [
+                    'class' => 'recurrency_input'
+                ]
+            ])
+            ->add('days', ChoiceType::class, [
+                'label' => "Jours",
+                'multiple' => true,
+                'choices' => [
+                    'Lundi' => 'MO',
+                    'Mardi' => 'TU',
+                    'Mercredi' => 'WE',
+                    'Jeudi' => 'TH',
+                    'Vendredi' => 'FR'
+                ],
+                'required' => false,
+                'attr' => [
+                    'class' => 'recurrency_input'
+                ]
             ])
         ;
     }
