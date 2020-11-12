@@ -24,26 +24,37 @@ class SessionController extends AbstractController
         $holidays = $holidayRepository->findAll();
         
         foreach($holidays as $holiday) {
-            $date[] = $holiday->getDate()->format('Ymd');
+            $dates[] = $holiday->getDate()->format('Ymd');
         }
         
         if($sessions) {
             $defaultDate = $sessions[0]->getStartAt()->format('Y-m-d');
             
             foreach ($sessions as $session) {
-                $datas[] = [
-                    "title" => $session->getName(),
-                    "rrule" => 
-                    "DTSTART:".$session->getStartAt()->format('Ymd').
-                    "\nRRULE:FREQ=".$session->getFrequency().
-                    ";UNTIL=".$session->getEndAt()->format('Ymd').
-                    ";INTERVAL=".$session->getFrequencyInterval().
-                    ";BYDAY=".implode(',',$session->getDays()).
-                    "\nEXDATE:".implode("\nEXDATE:",$date)
-                ];
+                if($session->getFrequency() == 'MONTHLY') {
+                    $datas[] = [
+                        "title" => $session->getName(),
+                        "rrule" => 
+                        "DTSTART:".$session->getStartAt()->format('Ymd').
+                        "\nRRULE:FREQ=".$session->getFrequency().
+                        ";UNTIL=".$session->getEndAt()->format('Ymd').
+                        ";INTERVAL=".$session->getFrequencyInterval().
+                        ";BYWEEKDAY=".implode(',',$session->getWeekDays()).
+                        "\nEXDATE:".implode("\nEXDATE:",$dates)
+                    ];
+                } else {
+                    $datas[] = [
+                        "title" => $session->getName(),
+                        "rrule" => 
+                        "DTSTART:".$session->getStartAt()->format('Ymd').
+                        "\nRRULE:FREQ=".$session->getFrequency().
+                        ";UNTIL=".$session->getEndAt()->format('Ymd').
+                        ";INTERVAL=".$session->getFrequencyInterval().
+                        ";BYDAY=".implode(',',$session->getDays()).
+                        "\nEXDATE:".implode("\nEXDATE:",$dates)
+                    ];
+                }
             }
-
-            //dd($datas);
     
             $data = json_encode($datas);
     

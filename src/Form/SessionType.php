@@ -67,7 +67,7 @@ class SessionType extends AbstractType
                 ]
             ])
             ->add('days', ChoiceType::class, [
-                'label' => "Jours",
+                'label' => " ",
                 'multiple' => true,
                 'choices' => [
                     'Lundi' => 'MO',
@@ -76,10 +76,44 @@ class SessionType extends AbstractType
                     'Jeudi' => 'TH',
                     'Vendredi' => 'FR'
                 ],
-                'required' => false,
-                'attr' => [
-                    'class' => 'recurrency_input'
-                ]
+                'required' => false
+            ])
+            ->add('weekDays', ChoiceType::class, [
+                'label' => " ",
+                'multiple' => true,
+                'choices' => [
+                    'Lundi' => [
+                        '1er' => '1MO',
+                        '2ème' => '2MO',
+                        '3ème' => '3MO',
+                        '4ème' => '4MO'
+                    ],
+                    'Mardi' => [
+                        '1er' => '1TU',
+                        '2ème' => '2TU',
+                        '3ème' => '3TU',
+                        '4ème' => '4TU'
+                    ],
+                    'Mercredi' => [
+                        '1er' => '1WE',
+                        '2ème' => '2WE',
+                        '3ème' => '3WE',
+                        '4ème' => '4WE'
+                    ],
+                    'Jeudi' => [
+                        '1er' => '1TH',
+                        '2ème' => '2TH',
+                        '3ème' => '3TH',
+                        '4ème' => '4TH'
+                    ],
+                    'Vendredi' => [
+                        '1er' => '1FR',
+                        '2ème' => '2FR',
+                        '3ème' => '3FR',
+                        '4ème' => '4FR'
+                    ]
+                ],
+                'required' => false
             ])
         ;
     }

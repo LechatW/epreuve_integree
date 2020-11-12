@@ -178,7 +178,7 @@ class AppFixtures extends Fixture
                      ->setMaxRegistration(10)
                      ->setFrequency('MONTHLY')
                      ->setFrequencyInterval(1)
-                     ->setDays(['1MO','1FR'])
+                     ->setWeekDays(['1MO','1FR'])
                      ->setTraining($training1)
             ;
             $manager->persist($session1);
@@ -193,7 +193,7 @@ class AppFixtures extends Fixture
                      ->setMaxRegistration(10)
                      ->setFrequency('MONTHLY')
                      ->setFrequencyInterval(1)
-                     ->setDays(['2TU'])
+                     ->setWeekDays(['2TU'])
                      ->setTraining($training1)
             ;
             $manager->persist($session2);
@@ -206,8 +206,9 @@ class AppFixtures extends Fixture
                      ->setRegistrationEndAt(new DateTime('2020-11-09'))
                      ->setLocation('La louvière')
                      ->setMaxRegistration(8)
-                     ->setFrequency('MONTHLY')
+                     ->setFrequency('WEEKLY')
                      ->setFrequencyInterval(1)
+                     ->setDays(['MO'])
                      ->setTraining($training2)
             ;
             $manager->persist($session3);

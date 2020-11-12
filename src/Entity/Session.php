@@ -86,6 +86,11 @@ class Session
      */
     private $days = [];
 
+    /**
+     * @ORM\Column(type="array", nullable=true)
+     */
+    private $weekDays = [];
+
     public function __construct()
     {
         $this->userSessions = new ArrayCollection();
@@ -251,6 +256,18 @@ class Session
     public function setDays(?array $days): self
     {
         $this->days = $days;
+
+        return $this;
+    }
+
+    public function getWeekDays(): ?array
+    {
+        return $this->weekDays;
+    }
+
+    public function setWeekDays(?array $weekDays): self
+    {
+        $this->weekDays = $weekDays;
 
         return $this;
     }
