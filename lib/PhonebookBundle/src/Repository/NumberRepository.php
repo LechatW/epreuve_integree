@@ -51,4 +51,18 @@ class NumberRepository extends ServiceEntityRepository
         ;
     }
 
+    public function findByUserAndType($idUser, $type)
+    {
+        return $this->createQueryBuilder('n')
+                    ->where('n.user = :idUser')
+                    ->andWhere('n.type = :type')
+                    ->setParameters([
+                        'idUser' => $idUser,
+                        'type' => $type
+                    ])
+                    ->getQuery()
+                    ->getSingleResult()
+        ;
+    }
+
 }

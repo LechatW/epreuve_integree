@@ -23,8 +23,8 @@ class NumberType extends AbstractType
             ->add('type', ChoiceType::class, [
                 'label' => "Type de numéro",
                 'choices' => [
-                    "Privé" => "Privé",
-                    "Professionnel" => "Professionnel"
+                    "Interne" => "internal",
+                    "Externe" => "external"
                 ]
             ])
         ;

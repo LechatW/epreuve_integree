@@ -4,7 +4,6 @@ namespace ZHC\PhonebookBundle\Entity;
 
 use ZHC\PhonebookBundle\Repository\NumberRepository;
 use ZHC\PhonebookBundle\Entity\Phonebook;
-use ZHC\PhonebookBundle\Entity\Phone;
 use App\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -51,15 +50,9 @@ class Number
      */
     private $user;
 
-    /**
-     * @ORM\ManyToMany(targetEntity=Phone::class, mappedBy="numbers")
-     */
-    private $phones;
-
     public function __construct()
     {
         $this->phonebooks = new ArrayCollection();
-        $this->phones = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -137,34 +130,6 @@ class Number
     public function setUser(?User $user): self
     {
         $this->user = $user;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Phone[]
-     */
-    public function getPhones(): Collection
-    {
-        return $this->phones;
-    }
-
-    public function addPhone(Phone $phone): self
-    {
-        if (!$this->phones->contains($phone)) {
-            $this->phones[] = $phone;
-            $phone->addNumber($this);
-        }
-
-        return $this;
-    }
-
-    public function removePhone(Phone $phone): self
-    {
-        if ($this->phones->contains($phone)) {
-            $this->phones->removeElement($phone);
-            $phone->removeNumber($this);
-        }
 
         return $this;
     }

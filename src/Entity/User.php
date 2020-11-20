@@ -5,9 +5,7 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use ZHC\PhonebookBundle\Entity\Call;
 use ZHC\PhonebookBundle\Entity\Number;
-use ZHC\PhonebookBundle\Entity\Phone;
 use App\Repository\UserRepository;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -51,21 +49,10 @@ class User implements UserInterface
     private $lastName;
 
     /**
-     * @ORM\OneToMany(targetEntity=Call::class, mappedBy="userIn")
-     * @ORM\JoinColumn(nullable=true)
-     */
-    private $calls;
-
-    /**
      * @ORM\OneToMany(targetEntity=Number::class, mappedBy="user")
      * @ORM\JoinColumn(nullable=true)
      */
     private $numbers;
-
-    /**
-     * @ORM\OneToOne(targetEntity=Phone::class, inversedBy="user", cascade={"persist", "remove"})
-     */
-    private $phone;
 
     /**
      * @ORM\OneToMany(targetEntity=UserSession::class, mappedBy="user", cascade={"persist", "remove"})
@@ -79,7 +66,6 @@ class User implements UserInterface
 
     public function __construct()
     {
-        $this->calls = new ArrayCollection();
         $this->numbers = new ArrayCollection();
         $this->userSessions = new ArrayCollection();
         $this->trainings = new ArrayCollection();
@@ -175,37 +161,6 @@ class User implements UserInterface
     }
 
     /**
-     * @return Collection|Call[]
-     */
-    public function getCalls(): Collection
-    {
-        return $this->calls;
-    }
-
-    public function addCall(Call $call): self
-    {
-        if (!$this->calls->contains($call)) {
-            $this->calls[] = $call;
-            $call->setUserIn($this);
-        }
-
-        return $this;
-    }
-
-    public function removeCall(Call $call): self
-    {
-        if ($this->calls->contains($call)) {
-            $this->calls->removeElement($call);
-            // set the owning side to null (unless already changed)
-            if ($call->getUserIn() === $this) {
-                $call->setUserIn(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
      * @return Collection|Number[]
      */
     public function getNumbers(): Collection
@@ -232,18 +187,6 @@ class User implements UserInterface
                 $number->setUser(null);
             }
         }
-
-        return $this;
-    }
-
-    public function getPhone(): ?Phone
-    {
-        return $this->phone;
-    }
-
-    public function setPhone(?Phone $phone): self
-    {
-        $this->phone = $phone;
 
         return $this;
     }
