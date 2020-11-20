@@ -2,12 +2,8 @@
 
 namespace ZHC\PhonebookBundle\Controller;
 
-use ZHC\PhonebookBundle\Entity\Call;
 use ZHC\PhonebookBundle\Entity\Number;
-use ZHC\PhonebookBundle\Entity\Phone;
 use ZHC\PhonebookBundle\Entity\Phonebook;
-use DateTime;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
@@ -37,6 +33,7 @@ class ApiController extends AbstractController
             'http://admin:admin@192.168.1.24:8088/ari/channels?endpoint=PJSIP/'.$callFrom->getPhoneNumber().'&extension='.$callTo.'&context='.$callType.'&priority=1&callerId='.$callerId
         );
 
+
         if($response->getStatusCode() !== 200) {
             $this->addFlash('error',"Une erreur est survenue lors de l'appel, veuillez réessayer plus tard");
             return $this->redirectToRoute('displayNumbers');
@@ -48,7 +45,7 @@ class ApiController extends AbstractController
     /**
      * @Route("/export/{phonebook}", name="export")
      */
-    public function export(Phonebook $phonebook, EntityManagerInterface $entityManager) 
+    public function export(Phonebook $phonebook) 
     {
         $roles = $this->getUser()->getRoles();
         $rolesLength = count($roles);

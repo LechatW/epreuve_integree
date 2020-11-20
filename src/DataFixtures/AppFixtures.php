@@ -156,6 +156,22 @@ class AppFixtures extends Fixture
             ;
             $manager->persist($number7);
 
+            $number8 = new Number();
+            $number8->setName($user3->getFirstName(). ' '. $user3->getLastName())
+                    ->setPhoneNumber('202')
+                    ->setType('internal')
+                    ->setUser($user3)
+            ;
+            $manager->persist($number8);
+
+            $number9 = new Number();
+            $number9->setName($user4->getFirstName(). ' '. $user4->getLastName())
+                    ->setPhoneNumber('203')
+                    ->setType('internal')
+                    ->setUser($user4)
+            ;
+            $manager->persist($number9);
+
             /**
              * Trainings
              */
