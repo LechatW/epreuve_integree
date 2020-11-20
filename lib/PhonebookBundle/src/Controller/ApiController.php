@@ -10,34 +10,39 @@ use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
+use ZHC\PhonebookBundle\Repository\NumberRepository;
 
 class ApiController extends AbstractController
 {
+    private $client;
+
+    public function __construct(HttpClientInterface $client)
+    {
+        $this->client = $client;
+    }
+
     /**
      * @Route("/appel/{number}", name="call")
      */
-    public function call(EntityManagerInterface $entityManager, Number $number)
+    public function call(Number $number, NumberRepository $numberRepository)
     {
-        $currentUser = $this->getUser();
+        $callFrom = $numberRepository->findByUserAndType($this->getUser()->getId(), 'internal');
+        $callTo = $number->getPhoneNumber();
+        $callType = $number->getType();
+        $callerId = $this->getUser()->getLogin();
+        
+        $response = $this->client->request(
+            'POST',
+            'http://admin:admin@192.168.1.24:8088/ari/channels?endpoint=PJSIP/'.$callFrom->getPhoneNumber().'&extension='.$callTo.'&context='.$callType.'&priority=1&callerId='.$callerId
+        );
 
-        if($currentUser && $currentUser->getId() !== $number->getUser()->getId()) {
-            $call = new Call();
-            $call->setDate(new DateTime('now'))
-                 ->setUserIn($this->getUser())
-                 ->setUserOut($number->getUser())
-            ;
-    
-            $entityManager->persist($call);
-            $entityManager->flush();
-
-            $this->addFlash("success","Appel effectué");
-
-            return $this->redirectToRoute('displayNumbers');
-        } else {
-            $this->addFlash("error", "Erreur lors de l'appel, veuillez réessayer plus tard");
-
+        if($response->getStatusCode() !== 200) {
+            $this->addFlash('error',"Une erreur est survenue lors de l'appel, veuillez réessayer plus tard");
             return $this->redirectToRoute('displayNumbers');
         }
+
+        return $this->redirectToRoute('displayNumbers');
     }
 
     /**
@@ -53,16 +58,15 @@ class ApiController extends AbstractController
             if(in_array($roles[$i],$rolesManagement) || in_array('ROLE_ADMIN',$roles)) {
                 $numbers = $phonebook->getNumbers();
 
-                $phone = new Phone();
+                $delete = "\"DELETE FROM Phone;\" \"DELETE FROM Contact;\" \"DELETE FROM Name;\"";
+                $insert = "";
 
-                foreach ($numbers as $number) {
-                    $phone->addNumber($number);
+                foreach($numbers as $key => $number) {
+                    $insert .= "\"INSERT INTO Contact VALUES(".($key+1).");\" \"INSERT INTO Name VALUES(".($key+1).",".($key+1).",0,0,'','','','".$number->getUser()->getFirstName().' '.$number->getUser()->getLastName()."');\" \"INSERT INTO Phone VALUES(".($key+1).",".($key+1).",0,'".$number->getPhoneNumber()."','".$number->getPhoneNumber()."',1,1,1,1,1,NULL,NULL);\" ";
                 }
-
-                $phone->setUser($this->getUser());
-
-                $entityManager->persist($phone);
-                $entityManager->flush();
+                
+                $cmd = "sqlite3 %APPDATA%/Zoiper5/ContactsV2.db \"PRAGMA foreign_keys=OFF;\" \"BEGIN TRANSACTION;\" $delete $insert \"COMMIT;\" \".exit\"";
+                shell_exec($cmd);
 
                 $this->addFlash("success","L'export a bien été effectué");
     

@@ -57,8 +57,8 @@ class AppFixtures extends Fixture
              * Users
              */
             $user1 = new User();
-            $user1->setLogin('admin')
-                  ->setPassword($this->encoder->encodePassword($user1, 'admin'))
+            $user1->setLogin('user1')
+                  ->setPassword($this->encoder->encodePassword($user1, 'user1'))
                   ->setRoles(['ROLE_ADMIN','ROLE_USER'])
                   ->setFirstName($faker->firstName())
                   ->setLastName($faker->lastName())
@@ -66,8 +66,8 @@ class AppFixtures extends Fixture
             $manager->persist($user1);
 
             $user2 = new User();
-            $user2->setLogin('grh')
-                  ->setPassword($this->encoder->encodePassword($user2, 'grh'))
+            $user2->setLogin('user2')
+                  ->setPassword($this->encoder->encodePassword($user2, 'user2'))
                   ->setRoles(['ROLE_RH','ROLE_USER'])
                   ->setFirstName($faker->firstName())
                   ->setLastName($faker->lastName())
@@ -75,8 +75,8 @@ class AppFixtures extends Fixture
             $manager->persist($user2);
 
             $user3 = new User();
-            $user3->setLogin('mons')
-                  ->setPassword($this->encoder->encodePassword($user3, 'mons'))
+            $user3->setLogin('user3')
+                  ->setPassword($this->encoder->encodePassword($user3, 'user3'))
                   ->setRoles(['ROLE_ANNUAIRE_MONS','ROLE_USER'])
                   ->setFirstName($faker->firstName())
                   ->setLastName($faker->lastName())
@@ -84,8 +84,8 @@ class AppFixtures extends Fixture
             $manager->persist($user3);
 
             $user4 = new User();
-            $user4->setLogin('comptabilite')
-                  ->setPassword($this->encoder->encodePassword($user4, 'comptabilite'))
+            $user4->setLogin('user4')
+                  ->setPassword($this->encoder->encodePassword($user4, 'user4'))
                   ->setRoles(['ROLE_COMPTABILITE','ROLE_USER'])
                   ->setFirstName($faker->firstName())
                   ->setLastName($faker->lastName())
@@ -98,7 +98,7 @@ class AppFixtures extends Fixture
             $number1 = new Number();
             $number1->setName('Caserne Mons')
                     ->setPhoneNumber($faker->phoneNumber())
-                    ->setType('Professionnel')
+                    ->setType('external')
                     ->addPhonebook($phonebook1)
                     ->setUser($user1)
             ;
@@ -107,7 +107,7 @@ class AppFixtures extends Fixture
             $number2 = new Number();
             $number2->setName('Secrétariat bis')
                     ->setPhoneNumber($faker->phoneNumber())
-                    ->setType('Professionnel')
+                    ->setType('external')
                     ->addPhonebook($phonebook1)
                     ->setUser($user2)
             ;
@@ -116,7 +116,7 @@ class AppFixtures extends Fixture
             $number3 = new Number();
             $number3->setName('Police')
                     ->setPhoneNumber($faker->phoneNumber())
-                    ->setType('Professionnel')
+                    ->setType('external')
                     ->addPhonebook($phonebook2)
                     ->setUser($user3)
             ;
@@ -125,7 +125,7 @@ class AppFixtures extends Fixture
             $number4 = new Number();
             $number4->setName('Ambulance')
                     ->setPhoneNumber($faker->phoneNumber())
-                    ->setType('Professionnel')
+                    ->setType('external')
                     ->addPhonebook($phonebook2)
                     ->addPhonebook($phonebook1)
                     ->setUser($user4)
@@ -135,10 +135,26 @@ class AppFixtures extends Fixture
             $number5 = new Number();
             $number5->setName($user1->getFirstName(). ' '. $user1->getLastName())
                     ->setPhoneNumber($faker->phoneNumber)
-                    ->setType('Professionnel')
+                    ->setType('external')
                     ->setUser($user1)
             ;
             $manager->persist($number5);
+
+            $number6 = new Number();
+            $number6->setName($user1->getFirstName(). ' '. $user1->getLastName())
+                    ->setPhoneNumber('200')
+                    ->setType('internal')
+                    ->setUser($user1)
+            ;
+            $manager->persist($number6);
+
+            $number7 = new Number();
+            $number7->setName($user2->getFirstName(). ' '. $user2->getLastName())
+                    ->setPhoneNumber('201')
+                    ->setType('internal')
+                    ->setUser($user2)
+            ;
+            $manager->persist($number7);
 
             /**
              * Trainings
