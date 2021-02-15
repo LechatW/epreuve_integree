@@ -24,6 +24,7 @@ class ScriptController extends AbstractController
 
             $number->setName($content['name'])
                    ->setPhoneNumber($content['phone_number'])
+                   ->setType('external')
             ;
 
             $entityManager->persist($number);

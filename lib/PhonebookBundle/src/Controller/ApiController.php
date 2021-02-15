@@ -27,7 +27,7 @@ class ApiController extends AbstractController
         $callTo = $number->getPhoneNumber();
         $callType = $number->getType();
         $callerId = $this->getUser()->getLogin();
-        
+    
         $response = $this->client->request(
             'POST',
             'http://admin:admin@192.168.1.24:8088/ari/channels?endpoint=PJSIP/'.$callFrom->getPhoneNumber().'&extension='.$callTo.'&context='.$callType.'&priority=1&callerId='.$callerId

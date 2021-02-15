@@ -61,8 +61,8 @@ class AppFixtures extends Fixture
             $user1->setLogin('user1')
                   ->setPassword($this->encoder->encodePassword($user1, 'user1'))
                   ->setRoles(['ROLE_ADMIN','ROLE_USER'])
-                  ->setFirstName($faker->firstName())
-                  ->setLastName($faker->lastName())
+                  ->setFirstName(utf8_encode($faker->firstName()))
+                  ->setLastName(utf8_encode($faker->lastName()))
             ;
             $manager->persist($user1);
 
@@ -70,8 +70,8 @@ class AppFixtures extends Fixture
             $user2->setLogin('user2')
                   ->setPassword($this->encoder->encodePassword($user2, 'user2'))
                   ->setRoles(['ROLE_RH','ROLE_USER'])
-                  ->setFirstName($faker->firstName())
-                  ->setLastName($faker->lastName())
+                  ->setFirstName(utf8_encode($faker->firstName()))
+                  ->setLastName(utf8_encode($faker->lastName()))
             ;
             $manager->persist($user2);
 
@@ -79,8 +79,8 @@ class AppFixtures extends Fixture
             $user3->setLogin('user3')
                   ->setPassword($this->encoder->encodePassword($user3, 'user3'))
                   ->setRoles(['ROLE_ANNUAIRE_MONS','ROLE_USER'])
-                  ->setFirstName($faker->firstName())
-                  ->setLastName($faker->lastName())
+                  ->setFirstName(utf8_encode($faker->firstName()))
+                  ->setLastName(utf8_encode($faker->lastName()))
             ;
             $manager->persist($user3);
 
@@ -88,8 +88,8 @@ class AppFixtures extends Fixture
             $user4->setLogin('user4')
                   ->setPassword($this->encoder->encodePassword($user4, 'user4'))
                   ->setRoles(['ROLE_COMPTABILITE','ROLE_USER'])
-                  ->setFirstName($faker->firstName())
-                  ->setLastName($faker->lastName())
+                  ->setFirstName(utf8_encode($faker->firstName()))
+                  ->setLastName(utf8_encode($faker->lastName()))
             ;
             $manager->persist($user4);
 

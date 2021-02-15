@@ -34,7 +34,7 @@
             <tr scope="row">
                 <td>{{number.name}}</td>
                 <td>
-                    {% if not app.user or app.user.id == number.user.id %}
+                    {% if not app.user or number.user and app.user.id == number.user.id %}
                         {{number.phoneNumber}}
                     {% else %}
                         <a href="{{path('call',{'number':number.id})}}">{{number.phoneNumber}}</a>

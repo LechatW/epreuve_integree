@@ -23,7 +23,7 @@ class SessionRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('s')
             ->andWhere('s.training = :training')
-            ->andWhere('s.startAt > CURRENT_DATE()')
+            //->andWhere('s.startAt > CURRENT_DATE()')
             ->setParameter('training', $training)
             ->orderBy('s.startAt', 'ASC')
             ->getQuery()
